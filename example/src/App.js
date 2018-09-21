@@ -1,13 +1,15 @@
-import React, { Component } from 'react'
+import React from "react";
+import ReactPannellum from "react-pannellum";
 
-import ExampleComponent from 'react-pannellum'
-
-export default class App extends Component {
-  render () {
+export default class App extends React.Component {
+  render() {
     return (
-      <div>
-        <ExampleComponent text='Modern React component module' />
+      <div className="App">
+        <ReactPannellum
+          imageSource="https://pannellum.org/images/alma.jpg"
+          autoRotate
+        />
       </div>
-    )
+    );
   }
 }
