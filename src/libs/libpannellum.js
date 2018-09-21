@@ -34,12 +34,25 @@ export default (function(window, document, undefined) {
      * @param {function} callback - Load callback function.
      * @param {Object} [params] - Other configuration parameters (`horizonPitch`, `horizonRoll`, `backgroundColor`).
      */
-    this.init = function(_image, _imageType, _dynamic, haov, vaov, voffset, callback, params) {
+    this.init = function(
+      _image,
+      _imageType,
+      _dynamic,
+      haov,
+      vaov,
+      voffset,
+      callback,
+      params
+    ) {
       // Default argument for image type
 
       if (_imageType === undefined) _imageType = "equirectangular";
 
-      if (_imageType != "equirectangular" && _imageType != "cubemap" && _imageType != "multires") {
+      if (
+        _imageType != "equirectangular" &&
+        _imageType != "cubemap" &&
+        _imageType != "multires"
+      ) {
         console.log("Error: invalid image type specified!");
         throw { type: "config error" };
       }
@@ -63,7 +76,8 @@ export default (function(window, document, undefined) {
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
         if (program.texture) gl.deleteTexture(program.texture);
         if (program.nodeCache) {
-          for (var i = 0; i < program.nodeCache.length; i++) gl.deleteTexture(program.nodeCache[i].texture);
+          for (var i = 0; i < program.nodeCache.length; i++)
+            gl.deleteTexture(program.nodeCache[i].texture);
         }
         gl.deleteProgram(program);
         program = undefined;
@@ -83,14 +97,24 @@ export default (function(window, document, undefined) {
         !(
           imageType == "cubemap" &&
           (image[0].width & (image[0].width - 1)) !== 0 &&
-          (navigator.userAgent.toLowerCase().match(/(iphone|ipod|ipad).* os 8_/) ||
-            navigator.userAgent.toLowerCase().match(/(iphone|ipod|ipad).* os 9_/) ||
-            navigator.userAgent.toLowerCase().match(/(iphone|ipod|ipad).* os 10_/) ||
+          (navigator.userAgent
+            .toLowerCase()
+            .match(/(iphone|ipod|ipad).* os 8_/) ||
+            navigator.userAgent
+              .toLowerCase()
+              .match(/(iphone|ipod|ipad).* os 9_/) ||
+            navigator.userAgent
+              .toLowerCase()
+              .match(/(iphone|ipod|ipad).* os 10_/) ||
             navigator.userAgent.match(/Trident.*rv[ :]*11\./))
         )
       ) {
         // Enable WebGL on canvas
-        if (!gl) gl = canvas.getContext("experimental-webgl", { alpha: false, depth: false });
+        if (!gl)
+          gl = canvas.getContext("experimental-webgl", {
+            alpha: false,
+            depth: false
+          });
         if (gl && gl.getError() == 1286) handleWebGLError1286();
       }
 
@@ -100,7 +124,8 @@ export default (function(window, document, undefined) {
       // (it doesn't work properly in Firefox).
       if (
         !gl &&
-        ((imageType == "multires" && image.hasOwnProperty("fallbackPath")) || imageType == "cubemap") &&
+        ((imageType == "multires" && image.hasOwnProperty("fallbackPath")) ||
+          imageType == "cubemap") &&
         ("WebkitAppearance" in document.documentElement.style ||
           navigator.userAgent.match(/Trident.*rv[ :]*11\./) ||
           navigator.appVersion.indexOf("MSIE 10") !== -1)
@@ -134,7 +159,12 @@ export default (function(window, document, undefined) {
           faceCanvas.width = this.width + 4;
           faceCanvas.height = this.height + 4;
           faceContext.drawImage(this, 2, 2);
-          let imgData = faceContext.getImageData(0, 0, faceCanvas.width, faceCanvas.height);
+          let imgData = faceContext.getImageData(
+            0,
+            0,
+            faceCanvas.width,
+            faceCanvas.height
+          );
           let data = imgData.data;
 
           // Duplicate edge pixels
@@ -142,20 +172,25 @@ export default (function(window, document, undefined) {
           let j;
           for (i = 2; i < faceCanvas.width - 2; i++) {
             for (j = 0; j < 4; j++) {
-              data[(i + faceCanvas.width) * 4 + j] = data[(i + faceCanvas.width * 2) * 4 + j];
+              data[(i + faceCanvas.width) * 4 + j] =
+                data[(i + faceCanvas.width * 2) * 4 + j];
               data[(i + faceCanvas.width * (faceCanvas.height - 2)) * 4 + j] =
                 data[(i + faceCanvas.width * (faceCanvas.height - 3)) * 4 + j];
             }
           }
           for (i = 2; i < faceCanvas.height - 2; i++) {
             for (j = 0; j < 4; j++) {
-              data[(i * faceCanvas.width + 1) * 4 + j] = data[(i * faceCanvas.width + 2) * 4 + j];
-              data[((i + 1) * faceCanvas.width - 2) * 4 + j] = data[((i + 1) * faceCanvas.width - 3) * 4 + j];
+              data[(i * faceCanvas.width + 1) * 4 + j] =
+                data[(i * faceCanvas.width + 2) * 4 + j];
+              data[((i + 1) * faceCanvas.width - 2) * 4 + j] =
+                data[((i + 1) * faceCanvas.width - 3) * 4 + j];
             }
           }
           for (j = 0; j < 4; j++) {
-            data[(faceCanvas.width + 1) * 4 + j] = data[(faceCanvas.width * 2 + 2) * 4 + j];
-            data[(faceCanvas.width * 2 - 2) * 4 + j] = data[(faceCanvas.width * 3 - 3) * 4 + j];
+            data[(faceCanvas.width + 1) * 4 + j] =
+              data[(faceCanvas.width * 2 + 2) * 4 + j];
+            data[(faceCanvas.width * 2 - 2) * 4 + j] =
+              data[(faceCanvas.width * 3 - 3) * 4 + j];
             data[(faceCanvas.width * (faceCanvas.height - 2) + 1) * 4 + j] =
               data[(faceCanvas.width * (faceCanvas.height - 3) + 2) * 4 + j];
             data[(faceCanvas.width * (faceCanvas.height - 1) - 2) * 4 + j] =
@@ -170,13 +205,16 @@ export default (function(window, document, undefined) {
           }
           for (i = 1; i < faceCanvas.height - 1; i++) {
             for (j = 0; j < 4; j++) {
-              data[i * faceCanvas.width * 4 + j] = data[(i * faceCanvas.width + 1) * 4 + j];
-              data[((i + 1) * faceCanvas.width - 1) * 4 + j] = data[((i + 1) * faceCanvas.width - 2) * 4 + j];
+              data[i * faceCanvas.width * 4 + j] =
+                data[(i * faceCanvas.width + 1) * 4 + j];
+              data[((i + 1) * faceCanvas.width - 1) * 4 + j] =
+                data[((i + 1) * faceCanvas.width - 2) * 4 + j];
             }
           }
           for (j = 0; j < 4; j++) {
             data[j] = data[(faceCanvas.width + 1) * 4 + j];
-            data[(faceCanvas.width - 1) * 4 + j] = data[(faceCanvas.width * 2 - 2) * 4 + j];
+            data[(faceCanvas.width - 1) * 4 + j] =
+              data[(faceCanvas.width * 2 - 2) * 4 + j];
             data[faceCanvas.width * (faceCanvas.height - 1) * 4 + j] =
               data[(faceCanvas.width * (faceCanvas.height - 2) + 1) * 4 + j];
             data[(faceCanvas.width * faceCanvas.height - 1) * 4 + j] =
@@ -195,11 +233,15 @@ export default (function(window, document, undefined) {
         };
         for (s = 0; s < 6; s++) {
           let faceImg = new Image();
-          faceImg.crossOrigin = globalParams.crossOrigin ? globalParams.crossOrigin : "anonymous";
+          faceImg.crossOrigin = globalParams.crossOrigin
+            ? globalParams.crossOrigin
+            : "anonymous";
           faceImg.side = s;
           faceImg.onload = onLoad;
           if (imageType == "multires") {
-            faceImg.src = encodeURI(`${path.replace("%s", sides[s])}.${image.extension}`);
+            faceImg.src = encodeURI(
+              `${path.replace("%s", sides[s])}.${image.extension}`
+            );
           } else {
             faceImg.src = encodeURI(image[s].src);
           }
@@ -247,7 +289,10 @@ export default (function(window, document, undefined) {
       }
 
       // Store horizon pitch and roll if applicable
-      if (params !== undefined && (params.horizonPitch !== undefined || params.horizonRoll !== undefined)) {
+      if (
+        params !== undefined &&
+        (params.horizonPitch !== undefined || params.horizonRoll !== undefined)
+      ) {
         pose = [
           params.horizonPitch == undefined ? 0 : params.horizonPitch,
           params.horizonRoll == undefined ? 0 : params.horizonRoll
@@ -288,9 +333,12 @@ export default (function(window, document, undefined) {
       gl.linkProgram(program);
 
       // Log errors
-      if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) console.log(gl.getShaderInfoLog(vs));
-      if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) console.log(gl.getShaderInfoLog(fs));
-      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) console.log(gl.getProgramInfoLog(program));
+      if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS))
+        console.log(gl.getShaderInfoLog(vs));
+      if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS))
+        console.log(gl.getShaderInfoLog(fs));
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS))
+        console.log(gl.getProgramInfoLog(program));
 
       // Use WebGL program
       gl.useProgram(program);
@@ -305,12 +353,26 @@ export default (function(window, document, undefined) {
         // Provide texture coordinates for rectangle
         if (!texCoordBuffer) texCoordBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, 1, 1, 1, 1, -1, -1, 1, 1, -1, -1, -1]), gl.STATIC_DRAW);
-        gl.vertexAttribPointer(program.texCoordLocation, 2, gl.FLOAT, false, 0, 0);
+        gl.bufferData(
+          gl.ARRAY_BUFFER,
+          new Float32Array([-1, 1, 1, 1, 1, -1, -1, 1, 1, -1, -1, -1]),
+          gl.STATIC_DRAW
+        );
+        gl.vertexAttribPointer(
+          program.texCoordLocation,
+          2,
+          gl.FLOAT,
+          false,
+          0,
+          0
+        );
 
         // Pass aspect ratio
         program.aspectRatio = gl.getUniformLocation(program, "u_aspectRatio");
-        gl.uniform1f(program.aspectRatio, gl.drawingBufferWidth / gl.drawingBufferHeight);
+        gl.uniform1f(
+          program.aspectRatio,
+          gl.drawingBufferWidth / gl.drawingBufferHeight
+        );
 
         // Locate psi, theta, focal length, horizontal extent, vertical extent, and vertical offset
         program.psi = gl.getUniformLocation(program, "u_psi");
@@ -328,8 +390,13 @@ export default (function(window, document, undefined) {
 
         // Set background color
         if (imageType == "equirectangular") {
-          program.backgroundColor = gl.getUniformLocation(program, "u_backgroundColor");
-          let color = params.backgroundColor ? params.backgroundColor : [0, 0, 0];
+          program.backgroundColor = gl.getUniformLocation(
+            program,
+            "u_backgroundColor"
+          );
+          let color = params.backgroundColor
+            ? params.backgroundColor
+            : [0, 0, 0];
           gl.uniform4fv(program.backgroundColor, color.concat([1]));
         }
 
@@ -340,12 +407,54 @@ export default (function(window, document, undefined) {
         // Upload images to texture depending on type
         if (imageType == "cubemap") {
           // Load all six sides of the cube map
-          gl.texImage2D(gl.TEXTURE_CUBE_MAP_POSITIVE_X, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image[1]);
-          gl.texImage2D(gl.TEXTURE_CUBE_MAP_NEGATIVE_X, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image[3]);
-          gl.texImage2D(gl.TEXTURE_CUBE_MAP_POSITIVE_Y, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image[4]);
-          gl.texImage2D(gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image[5]);
-          gl.texImage2D(gl.TEXTURE_CUBE_MAP_POSITIVE_Z, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image[0]);
-          gl.texImage2D(gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image[2]);
+          gl.texImage2D(
+            gl.TEXTURE_CUBE_MAP_POSITIVE_X,
+            0,
+            gl.RGB,
+            gl.RGB,
+            gl.UNSIGNED_BYTE,
+            image[1]
+          );
+          gl.texImage2D(
+            gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
+            0,
+            gl.RGB,
+            gl.RGB,
+            gl.UNSIGNED_BYTE,
+            image[3]
+          );
+          gl.texImage2D(
+            gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
+            0,
+            gl.RGB,
+            gl.RGB,
+            gl.UNSIGNED_BYTE,
+            image[4]
+          );
+          gl.texImage2D(
+            gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
+            0,
+            gl.RGB,
+            gl.RGB,
+            gl.UNSIGNED_BYTE,
+            image[5]
+          );
+          gl.texImage2D(
+            gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
+            0,
+            gl.RGB,
+            gl.RGB,
+            gl.UNSIGNED_BYTE,
+            image[0]
+          );
+          gl.texImage2D(
+            gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
+            0,
+            gl.RGB,
+            gl.RGB,
+            gl.UNSIGNED_BYTE,
+            image[2]
+          );
         } else {
           // Upload image to the texture
           gl.texImage2D(glBindType, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
@@ -368,11 +477,19 @@ export default (function(window, document, undefined) {
 
         // Bind texture coordinate buffer and pass coordinates to WebGL
         gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertTexCoordBuf);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), gl.STATIC_DRAW);
+        gl.bufferData(
+          gl.ARRAY_BUFFER,
+          new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]),
+          gl.STATIC_DRAW
+        );
 
         // Bind square index buffer and pass indicies to WebGL
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertIndBuf);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array([0, 1, 2, 0, 2, 3]), gl.STATIC_DRAW);
+        gl.bufferData(
+          gl.ELEMENT_ARRAY_BUFFER,
+          new Uint16Array([0, 1, 2, 0, 2, 3]),
+          gl.STATIC_DRAW
+        );
 
         // Find uniforms
         program.perspUniform = gl.getUniformLocation(program, "u_perspMatrix");
@@ -431,7 +548,10 @@ export default (function(window, document, undefined) {
         if (gl.getError() == 1286) handleWebGLError1286();
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
         if (imageType != "multires") {
-          gl.uniform1f(program.aspectRatio, canvas.clientWidth / canvas.clientHeight);
+          gl.uniform1f(
+            program.aspectRatio,
+            canvas.clientWidth / canvas.clientHeight
+          );
         }
       }
     };
@@ -477,8 +597,11 @@ export default (function(window, document, undefined) {
           x =
             Math.cos(horizonRoll) * Math.sin(pitch) * Math.sin(horizonPitch) +
             Math.cos(pitch) *
-              (Math.cos(horizonPitch) * Math.cos(yaw) + Math.sin(horizonRoll) * Math.sin(horizonPitch) * Math.sin(yaw)),
-          y = -Math.sin(pitch) * Math.sin(horizonRoll) + Math.cos(pitch) * Math.cos(horizonRoll) * Math.sin(yaw),
+              (Math.cos(horizonPitch) * Math.cos(yaw) +
+                Math.sin(horizonRoll) * Math.sin(horizonPitch) * Math.sin(yaw)),
+          y =
+            -Math.sin(pitch) * Math.sin(horizonRoll) +
+            Math.cos(pitch) * Math.cos(horizonRoll) * Math.sin(yaw),
           z =
             Math.cos(horizonRoll) * Math.cos(horizonPitch) * Math.sin(pitch) +
             Math.cos(pitch) *
@@ -490,19 +613,27 @@ export default (function(window, document, undefined) {
         // Calculate roll
         let v = [
             Math.cos(orig_pitch) *
-              (Math.sin(horizonRoll) * Math.sin(horizonPitch) * Math.cos(orig_yaw) -
+              (Math.sin(horizonRoll) *
+                Math.sin(horizonPitch) *
+                Math.cos(orig_yaw) -
                 Math.cos(horizonPitch) * Math.sin(orig_yaw)),
             Math.cos(orig_pitch) * Math.cos(horizonRoll) * Math.cos(orig_yaw),
             Math.cos(orig_pitch) *
-              (Math.cos(horizonPitch) * Math.sin(horizonRoll) * Math.cos(orig_yaw) +
+              (Math.cos(horizonPitch) *
+                Math.sin(horizonRoll) *
+                Math.cos(orig_yaw) +
                 Math.sin(orig_yaw) * Math.sin(horizonPitch))
           ],
-          w = [-Math.cos(pitch) * Math.sin(yaw), Math.cos(pitch) * Math.cos(yaw)];
+          w = [
+            -Math.cos(pitch) * Math.sin(yaw),
+            Math.cos(pitch) * Math.cos(yaw)
+          ];
         let roll_adj = Math.acos(
           Math.max(
             Math.min(
               (v[0] * w[0] + v[1] * w[1]) /
-                (Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]) * Math.sqrt(w[0] * w[0] + w[1] * w[1])),
+                (Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]) *
+                  Math.sqrt(w[0] * w[0] + w[1] * w[1])),
               1
             ),
             -1
@@ -519,10 +650,12 @@ export default (function(window, document, undefined) {
 
         let transforms = {
           f: `translate3d(-${s + 2}px, -${s + 2}px, -${s}px)`,
-          b: `translate3d(${s + 2}px, -${s + 2}px, ${s}px) rotateX(180deg) rotateZ(180deg)`,
+          b: `translate3d(${s + 2}px, -${s +
+            2}px, ${s}px) rotateX(180deg) rotateZ(180deg)`,
           u: `translate3d(-${s + 2}px, -${s}px, ${s + 2}px) rotateX(270deg)`,
           d: `translate3d(-${s + 2}px, ${s}px, -${s + 2}px) rotateX(90deg)`,
-          l: `translate3d(-${s}px, -${s + 2}px, ${s + 2}px) rotateX(180deg) rotateY(90deg) rotateZ(180deg)`,
+          l: `translate3d(-${s}px, -${s + 2}px, ${s +
+            2}px) rotateX(180deg) rotateY(90deg) rotateZ(180deg)`,
           r: `translate3d(${s}px, -${s + 2}px, -${s + 2}px) rotateY(270deg)`
         };
         focal = 1 / Math.tan(hfov / 2);
@@ -541,7 +674,12 @@ export default (function(window, document, undefined) {
 
       if (imageType != "multires") {
         // Calculate focal length from vertical field of view
-        let vfov = 2 * Math.atan(Math.tan(hfov * 0.5) / (gl.drawingBufferWidth / gl.drawingBufferHeight));
+        let vfov =
+          2 *
+          Math.atan(
+            Math.tan(hfov * 0.5) /
+              (gl.drawingBufferWidth / gl.drawingBufferHeight)
+          );
         focal = 1 / Math.tan(vfov * 0.5);
 
         // Pass psi, theta, roll, and focal length
@@ -554,7 +692,14 @@ export default (function(window, document, undefined) {
           // Update texture if dynamic
           if (imageType == "equirectangular") {
             gl.bindTexture(gl.TEXTURE_2D, program.texture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+            gl.texImage2D(
+              gl.TEXTURE_2D,
+              0,
+              gl.RGB,
+              gl.RGB,
+              gl.UNSIGNED_BYTE,
+              image
+            );
           }
         }
 
@@ -562,7 +707,12 @@ export default (function(window, document, undefined) {
         gl.drawArrays(gl.TRIANGLES, 0, 6);
       } else {
         // Create perspective matrix
-        let perspMatrix = makePersp(hfov, gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 100.0);
+        let perspMatrix = makePersp(
+          hfov,
+          gl.drawingBufferWidth / gl.drawingBufferHeight,
+          0.1,
+          100.0
+        );
 
         // Find correct zoom level
         checkZoom(hfov);
@@ -575,15 +725,29 @@ export default (function(window, document, undefined) {
         matrix = makeMatrix4(matrix);
 
         // Set matrix uniforms
-        gl.uniformMatrix4fv(program.perspUniform, false, new Float32Array(transposeMatrix4(perspMatrix)));
-        gl.uniformMatrix4fv(program.cubeUniform, false, new Float32Array(transposeMatrix4(matrix)));
+        gl.uniformMatrix4fv(
+          program.perspUniform,
+          false,
+          new Float32Array(transposeMatrix4(perspMatrix))
+        );
+        gl.uniformMatrix4fv(
+          program.cubeUniform,
+          false,
+          new Float32Array(transposeMatrix4(matrix))
+        );
 
         // Find current nodes
         let rotPersp = rotatePersp(perspMatrix, matrix);
         program.nodeCache.sort(multiresNodeSort);
-        if (program.nodeCache.length > 200 && program.nodeCache.length > program.currentNodes.length + 50) {
+        if (
+          program.nodeCache.length > 200 &&
+          program.nodeCache.length > program.currentNodes.length + 50
+        ) {
           // Remove older nodes from cache
-          let removed = program.nodeCache.splice(200, program.nodeCache.length - 200);
+          let removed = program.nodeCache.splice(
+            200,
+            program.nodeCache.length - 200
+          );
           for (var i = 0; i < removed.length; i++) {
             // Explicitly delete textures
             gl.deleteTexture(removed[i].texture);
@@ -593,7 +757,14 @@ export default (function(window, document, undefined) {
 
         let sides = ["f", "b", "u", "d", "l", "r"];
         for (s = 0; s < 6; s++) {
-          let ntmp = new MultiresNode(vtmps[s], sides[s], 1, 0, 0, image.fullpath);
+          let ntmp = new MultiresNode(
+            vtmps[s],
+            sides[s],
+            1,
+            0,
+            0,
+            image.fullpath
+          );
           testMultiresNode(rotPersp, ntmp, pitch, yaw, hfov);
         }
         program.currentNodes.sort(multiresNodeRenderSort);
@@ -692,12 +863,30 @@ export default (function(window, document, undefined) {
 
             // Bind vertex buffer and pass vertices to WebGL
             gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertBuf);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(program.currentNodes[i].vertices), gl.STATIC_DRAW);
-            gl.vertexAttribPointer(program.vertPosLocation, 3, gl.FLOAT, false, 0, 0);
+            gl.bufferData(
+              gl.ARRAY_BUFFER,
+              new Float32Array(program.currentNodes[i].vertices),
+              gl.STATIC_DRAW
+            );
+            gl.vertexAttribPointer(
+              program.vertPosLocation,
+              3,
+              gl.FLOAT,
+              false,
+              0,
+              0
+            );
 
             // Prep for texture
             gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertTexCoordBuf);
-            gl.vertexAttribPointer(program.texCoordLocation, 2, gl.FLOAT, false, 0, 0);
+            gl.vertexAttribPointer(
+              program.texCoordLocation,
+              2,
+              gl.FLOAT,
+              false,
+              0,
+              0
+            );
 
             // Bind texture and draw tile
             gl.bindTexture(gl.TEXTURE_2D, program.currentNodes[i].texture); // Bind program.currentNodes[i].texture to TEXTURE0
@@ -753,9 +942,13 @@ export default (function(window, document, undefined) {
         let theta = Math.asin(z / r);
         let phi = Math.atan2(y, x);
         let ydiff = phi - yaw;
-        ydiff += ydiff > Math.PI ? -2 * Math.PI : ydiff < -Math.PI ? 2 * Math.PI : 0;
+        ydiff +=
+          ydiff > Math.PI ? -2 * Math.PI : ydiff < -Math.PI ? 2 * Math.PI : 0;
         ydiff = Math.abs(ydiff);
-        node.diff = Math.acos(Math.sin(pitch) * Math.sin(theta) + Math.cos(pitch) * Math.cos(theta) * Math.cos(ydiff));
+        node.diff = Math.acos(
+          Math.sin(pitch) * Math.sin(theta) +
+            Math.cos(pitch) * Math.cos(theta) * Math.cos(ydiff)
+        );
 
         // Add node to current nodes and load texture if needed
         let inCurrent = false;
@@ -778,7 +971,8 @@ export default (function(window, document, undefined) {
         // TODO: Test error
         // Create child nodes
         if (node.level < program.level) {
-          let cubeSize = image.cubeResolution * Math.pow(2, node.level - image.maxLevel);
+          let cubeSize =
+            image.cubeResolution * Math.pow(2, node.level - image.maxLevel);
           let numTiles = Math.ceil(cubeSize * image.invTileResolution) - 1;
           let doubleTileSize = (cubeSize % image.tileResolution) * 2;
           let lastTileSize = (cubeSize * 2) % image.tileResolution;
@@ -790,7 +984,9 @@ export default (function(window, document, undefined) {
           }
           let f = 0.5;
           if (node.x == numTiles || node.y == numTiles) {
-            f = 1.0 - image.tileResolution / (image.tileResolution + lastTileSize);
+            f =
+              1.0 -
+              image.tileResolution / (image.tileResolution + lastTileSize);
           }
           let i = 1.0 - f;
           let children = [];
@@ -853,7 +1049,14 @@ export default (function(window, document, undefined) {
             v[1] * f2 + v[10] * i2,
             v[2] * f3 + v[11] * i3
           ];
-          ntmp = new MultiresNode(vtmp, node.side, node.level + 1, node.x * 2, node.y * 2, image.fullpath);
+          ntmp = new MultiresNode(
+            vtmp,
+            node.side,
+            node.level + 1,
+            node.x * 2,
+            node.y * 2,
+            image.fullpath
+          );
           children.push(ntmp);
           if (!(node.x == numTiles && doubleTileSize <= image.tileResolution)) {
             vtmp = [
@@ -870,7 +1073,14 @@ export default (function(window, document, undefined) {
               v[1] * f2 + v[7] * i2,
               v[2] * f3 + v[8] * i3
             ];
-            ntmp = new MultiresNode(vtmp, node.side, node.level + 1, node.x * 2 + 1, node.y * 2, image.fullpath);
+            ntmp = new MultiresNode(
+              vtmp,
+              node.side,
+              node.level + 1,
+              node.x * 2 + 1,
+              node.y * 2,
+              image.fullpath
+            );
             children.push(ntmp);
           }
           if (
@@ -891,7 +1101,14 @@ export default (function(window, document, undefined) {
               v[10] * f + v[7] * i,
               v[11] * f3 + v[8] * i3
             ];
-            ntmp = new MultiresNode(vtmp, node.side, node.level + 1, node.x * 2 + 1, node.y * 2 + 1, image.fullpath);
+            ntmp = new MultiresNode(
+              vtmp,
+              node.side,
+              node.level + 1,
+              node.x * 2 + 1,
+              node.y * 2 + 1,
+              image.fullpath
+            );
             children.push(ntmp);
           }
           if (!(node.y == numTiles && doubleTileSize <= image.tileResolution)) {
@@ -909,7 +1126,14 @@ export default (function(window, document, undefined) {
               v[10],
               v[11]
             ];
-            ntmp = new MultiresNode(vtmp, node.side, node.level + 1, node.x * 2, node.y * 2 + 1, image.fullpath);
+            ntmp = new MultiresNode(
+              vtmp,
+              node.side,
+              node.level + 1,
+              node.x * 2,
+              node.y * 2 + 1,
+              image.fullpath
+            );
             children.push(ntmp);
           }
           for (let j = 0; j < children.length; j++) {
@@ -1069,7 +1293,24 @@ export default (function(window, document, undefined) {
      * @returns {number[]} Expanded matrix.
      */
     function makeMatrix4(m) {
-      return [m[0], m[1], m[2], 0, m[3], m[4], m[5], 0, m[6], m[7], m[8], 0, 0, 0, 0, 1];
+      return [
+        m[0],
+        m[1],
+        m[2],
+        0,
+        m[3],
+        m[4],
+        m[5],
+        0,
+        m[6],
+        m[7],
+        m[8],
+        0,
+        0,
+        0,
+        0,
+        1
+      ];
     }
 
     /**
@@ -1079,7 +1320,24 @@ export default (function(window, document, undefined) {
      * @returns {number[]} Transposed matrix.
      */
     function transposeMatrix4(m) {
-      return [m[0], m[4], m[8], m[12], m[1], m[5], m[9], m[13], m[2], m[6], m[10], m[14], m[3], m[7], m[11], m[15]];
+      return [
+        m[0],
+        m[4],
+        m[8],
+        m[12],
+        m[1],
+        m[5],
+        m[9],
+        m[13],
+        m[2],
+        m[6],
+        m[10],
+        m[14],
+        m[3],
+        m[7],
+        m[11],
+        m[15]
+      ];
     }
 
     /**
@@ -1092,7 +1350,11 @@ export default (function(window, document, undefined) {
      * @returns {number[]} Generated perspective matrix.
      */
     function makePersp(hfov, aspect, znear, zfar) {
-      let fovy = 2 * Math.atan((Math.tan(hfov / 2) * gl.drawingBufferHeight) / gl.drawingBufferWidth);
+      let fovy =
+        2 *
+        Math.atan(
+          (Math.tan(hfov / 2) * gl.drawingBufferHeight) / gl.drawingBufferWidth
+        );
       let f = 1 / Math.tan(fovy / 2);
       return [
         f / aspect,
@@ -1149,7 +1411,11 @@ export default (function(window, document, undefined) {
         });
       }
 
-      TextureImageLoader.prototype.loadTexture = function(src, texture, callback) {
+      TextureImageLoader.prototype.loadTexture = function(
+        src,
+        texture,
+        callback
+      ) {
         this.texture = texture;
         this.callback = callback;
         this.image.src = src;
@@ -1168,13 +1434,18 @@ export default (function(window, document, undefined) {
         } else textureImageCache[cacheTop++] = til;
       }
 
-      for (let i = 0; i < cacheTop; i++) textureImageCache[i] = new TextureImageLoader();
+      for (let i = 0; i < cacheTop; i++)
+        textureImageCache[i] = new TextureImageLoader();
 
       return function(src, callback, _crossOrigin) {
         crossOrigin = _crossOrigin;
         let texture = gl.createTexture();
-        if (cacheTop) textureImageCache[--cacheTop].loadTexture(src, texture, callback);
-        else pendingTextureRequests.push(new PendingTextureRequest(src, texture, callback));
+        if (cacheTop)
+          textureImageCache[--cacheTop].loadTexture(src, texture, callback);
+        else
+          pendingTextureRequests.push(
+            new PendingTextureRequest(src, texture, callback)
+          );
         return texture;
       };
     })();
@@ -1208,7 +1479,11 @@ export default (function(window, document, undefined) {
       let newLevel = 1;
       while (
         newLevel < image.maxLevel &&
-        gl.drawingBufferWidth > image.tileResolution * Math.pow(2, newLevel - 1) * Math.tan(hfov / 2) * 0.707
+        gl.drawingBufferWidth >
+          image.tileResolution *
+            Math.pow(2, newLevel - 1) *
+            Math.tan(hfov / 2) *
+            0.707
       ) {
         newLevel++;
       }
@@ -1439,4 +1714,7 @@ export default (function(window, document, undefined) {
       return new Renderer(container, image, imagetype, dynamic);
     }
   };
-})(typeof window === "undefined" ? null : window, typeof document === "undefined" ? null : document);
+})(
+  typeof window === "undefined" ? null : window,
+  typeof document === "undefined" ? null : document
+);
