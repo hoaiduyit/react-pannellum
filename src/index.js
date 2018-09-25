@@ -1,3 +1,8 @@
-import ReactPannellum from "./components/ReactPannellum";
+import {
+  ReactPannellum,
+  addScene,
+  getCurrentScene,
+  getAllScenes
+} from "./components/ReactPannellum";
 
-export default ReactPannellum;
+export { ReactPannellum, addScene, getCurrentScene, getAllScenes };

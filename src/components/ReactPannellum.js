@@ -1,73 +1,99 @@
 import React from "react";
 import PropTypes from "prop-types";
 import pannellum from "../libs/pannellum.js";
+import constants from "../utils/constants";
 import "../css/pannellum.css";
 
-export default class Pannellum extends React.Component {
+let myPannellum = undefined;
+
+class ReactPannellum extends React.Component {
   static propTypes = {
+    sceneId: PropTypes.string.isRequired,
     imageSource: PropTypes.string.isRequired,
-    autoLoad: PropTypes.boolean,
-    autoRotate: PropTypes.boolean,
-    autoRotateSpeep: PropTypes.number,
-    autoRotateInactivityDelay: PropTypes.number,
-    autoRotateStopDelay: PropTypes.number,
-    previewImage: PropTypes.string,
+    config: PropTypes.shape({}),
     className: PropTypes.string,
-    style: PropTypes.shape({}),
-    uiText: PropTypes.shape({})
+    style: PropTypes.shape({})
   };
 
   static defaultProps = {
-    autoLoad: false,
-    autoRotate: false,
-    autoRotateSpeep: -2,
-    autoRotateInactivityDelay: 0,
-    autoRotateStopDelay: 0,
-    previewImage: "",
     className: "",
     style: {
-      width: "600px",
-      height: "400px",
-      background: "#000000"
+      ...constants.style
     },
-    uiText: {
-      loadButtonLabel: "Click to<br>Load<br>Panorama",
-      loadingLabel: "Loading...",
-      bylineLabel: "by %s",
-      noPanoramaError: "No panorama image was specified.",
-      fileAccessError: "The file %s could not be accessed.",
-      malformedURLError: "There is something wrong with the panorama URL.",
-      iOS8WebGLError:
-        "Due to iOS 8's broken WebGL implementation, only progressive encoded JPEGs work for your device (this panorama uses standard encoding).",
-      genericWebGLError:
-        "Your browser does not have the necessary WebGL support to display this panorama.",
-      textureSizeError:
-        "This panorama is too big for your device! It's %spx wide, but your device only supports images up to %spx wide. Try another device. (If you're the author, try scaling down the image.)",
-      unknownError: "Unknown error. Check developer console."
+    config: {
+      autoLoad: false,
+      autoRotate: 0,
+      autoRotateInactivityDelay: 0,
+      autoRotateStopDelay: 0,
+      preview: "",
+      uiText: {
+        ...constants.uiText
+      },
+      showZoomCtrl: true,
+      keyboardZoom: true,
+      mouseZoom: true,
+      doubleClickZoom: false,
+      draggable: true,
+      disableKeyboardCtrl: false,
+      showFullscreenCtrl: true,
+      showControls: true,
+      yaw: 0,
+      pitch: 0,
+      maxPitch: 90,
+      minPitch: -90,
+      maxYaw: 180,
+      minYaw: -180,
+      hfov: 100,
+      compass: false,
+      northOffset: 0,
+      hotSpots: [],
+      hotSpotDebug: false
     }
   };
 
-  componentDidMount() {
+  initPanalleum() {
     const {
+      sceneId,
+      config,
       imageSource,
-      autoLoad,
       autoRotate,
-      autoRotateSpeep,
-      autoRotateInactivityDelay,
-      autoRotateStopDelay,
-      previewImage,
-      uiText
+      autoRotateSpeep
     } = this.props;
-    const myPannellum = pannellum.viewer("react-pannellum", {
-      type: "equirectangular",
-      panorama: imageSource,
-      autoLoad,
-      autoRotate: autoRotate ? autoRotateSpeep : 0,
-      autoRotateInactivityDelay,
-      autoRotateStopDelay,
-      preview: previewImage,
-      strings: uiText
+
+    myPannellum = pannellum.viewer("react-pannellum", {
+      default: {
+        firstScene: sceneId
+      },
+      scenes: {
+        [sceneId]: {
+          ...config,
+          imageSource
+        }
+      }
     });
+  }
+
+  componentDidMount() {
+    if (!myPannellum && this.props.imageSource) {
+      // make sure that your pannellum has enough time to load
+      setTimeout(() => {
+        this.initPanalleum();
+      }, 100);
+    }
+  }
+
+  static addScene(sceneId, config) {
+    if (myPannellum) {
+      myPannellum.addScene(sceneId, config);
+    }
+  }
+
+  static getCurrentScene() {
+    return myPannellum && myPannellum.getCurrentScene();
+  }
+
+  static getAllScenes() {
+    return myPannellum && myPannellum.getAllScenes();
   }
 
   render() {
@@ -75,3 +101,12 @@ export default class Pannellum extends React.Component {
     return <div id="react-pannellum" style={style} className={className} />;
   }
 }
+
+const addScene = ReactPannellum.addScene;
+
+const getCurrentScene = ReactPannellum.getCurrentScene;
+
+const getAllScenes = ReactPannellum.getAllScenes;
+
+export default { ReactPannellum, addScene, getCurrentScene, getAllScenes };
+export { ReactPannellum, addScene, getCurrentScene, getAllScenes };

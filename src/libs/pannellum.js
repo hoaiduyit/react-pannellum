@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import libpannellum from "./libpannellum";
 
 export default (function(window, document, undefined) {
@@ -43,8 +42,8 @@ export default (function(window, document, undefined) {
       minHfov: 50,
       maxHfov: 120,
       pitch: 0,
-      minPitch: undefined,
-      maxPitch: undefined,
+      minPitch: -90,
+      maxPitch: 90,
       yaw: 0,
       minYaw: -180,
       maxYaw: 180,
@@ -54,12 +53,12 @@ export default (function(window, document, undefined) {
       vOffset: 0,
       autoRotate: false,
       autoRotateInactivityDelay: -1,
-      autoRotateStopDelay: undefined,
+      autoRotateStopDelay: 0,
       type: "equirectangular",
       northOffset: 0,
       showFullscreenCtrl: true,
       dynamic: false,
-      doubleClickZoom: true,
+      doubleClickZoom: false,
       keyboardZoom: true,
       mouseZoom: true,
       showZoomCtrl: true,
@@ -77,7 +76,7 @@ export default (function(window, document, undefined) {
     // Translatable / configurable strings
     // Some strings contain '%s', which is a placeholder for inserted values
     // When setting strings in external configuration, `\n` should be used instead of `<br>` to insert line breaks
-    defaultConfig.strings = {
+    defaultConfig.uiText = {
       // Labels
       loadButtonLabel: "Click to<br>Load<br>Panorama",
       loadingLabel: "Loading...",
@@ -330,10 +329,10 @@ export default (function(window, document, undefined) {
         panoImage = c;
       } else {
         if (config.dynamic === true) {
-          panoImage = config.panorama;
+          panoImage = config.imageSource;
         } else {
-          if (config.panorama === undefined) {
-            anError(config.strings.noPanoramaError);
+          if (config.imageSource === undefined) {
+            anError(config.uiText.noPanoramaError);
             return;
           }
           panoImage = new Image();
@@ -356,7 +355,7 @@ export default (function(window, document, undefined) {
           var a = document.createElement("a");
           a.href = e.target.src;
           a.innerHTML = a.href;
-          anError(config.strings.fileAccessError.replace("%s", a.outerHTML));
+          anError(config.uiText.fileAccessError.replace("%s", a.outerHTML));
         };
 
         for (i = 0; i < panoImage.length; i++) {
@@ -378,9 +377,9 @@ export default (function(window, document, undefined) {
 
         if (config.dynamic !== true) {
           // Still image
-          p = absoluteURL(config.panorama)
-            ? config.panorama
-            : p + config.panorama;
+          p = absoluteURL(config.imageSource)
+            ? config.imageSource
+            : p + config.imageSource;
 
           panoImage.onload = function() {
             window.URL.revokeObjectURL(this.src); // Clean up
@@ -394,9 +393,7 @@ export default (function(window, document, undefined) {
               var a = document.createElement("a");
               a.href = encodeURI(p);
               a.innerHTML = a.href;
-              anError(
-                config.strings.fileAccessError.replace("%s", a.outerHTML)
-              );
+              anError(config.uiText.fileAccessError.replace("%s", a.outerHTML));
             }
             var img = this.response;
             parseGPanoXMP(img);
@@ -433,7 +430,7 @@ export default (function(window, document, undefined) {
             xhr.open("GET", p, true);
           } catch (e) {
             // Malformed URL
-            anError(config.strings.malformedURLError);
+            anError(config.uiText.malformedURLError);
           }
           xhr.responseType = "blob";
           xhr.setRequestHeader("Accept", "image/*,*/*;q=0.9");
@@ -560,7 +557,7 @@ export default (function(window, document, undefined) {
         ) {
           var flagIndex = img.indexOf("\xff\xc2");
           if (flagIndex < 0 || flagIndex > 65536)
-            anError(config.strings.iOS8WebGLError);
+            anError(config.uiText.iOS8WebGLError);
         }
 
         var start = img.indexOf("<x:xmpmeta");
@@ -652,7 +649,7 @@ export default (function(window, document, undefined) {
      *      generic WebGL error is displayed.
      */
     function anError(errorMsg) {
-      if (errorMsg === undefined) errorMsg = config.strings.genericWebGLError;
+      if (errorMsg === undefined) errorMsg = config.uiText.genericWebGLError;
       infoDisplay.errorMsg.innerHTML = "<p>" + errorMsg + "</p>";
       controls.load.style.display = "none";
       infoDisplay.load.box.style.display = "none";
@@ -1791,12 +1788,12 @@ export default (function(window, document, undefined) {
           anError();
         } else if (event.type == "webgl size error") {
           anError(
-            config.strings.textureSizeError
+            config.uiText.textureSizeError
               .replace("%s", event.width)
               .replace("%s", event.maxWidth)
           );
         } else {
-          anError(config.strings.unknownError);
+          anError(config.uiText.unknownError);
           throw event;
         }
       }
@@ -2077,9 +2074,7 @@ export default (function(window, document, undefined) {
           if (k == "strings") {
             for (s in initialConfig.default.strings) {
               if (initialConfig.default.strings.hasOwnProperty(s)) {
-                config.strings[s] = escapeHTML(
-                  initialConfig.default.strings[s]
-                );
+                config.uiText[s] = escapeHTML(initialConfig.default.strings[s]);
               }
             }
           } else {
@@ -2104,7 +2099,7 @@ export default (function(window, document, undefined) {
             if (k == "strings") {
               for (s in scene.strings) {
                 if (scene.strings.hasOwnProperty(s)) {
-                  config.strings[s] = escapeHTML(scene.strings[s]);
+                  config.uiText[s] = escapeHTML(scene.strings[s]);
                 }
               }
             } else {
@@ -2124,7 +2119,7 @@ export default (function(window, document, undefined) {
           if (k == "strings") {
             for (s in initialConfig.strings) {
               if (initialConfig.strings.hasOwnProperty(s)) {
-                config.strings[s] = escapeHTML(initialConfig.strings[s]);
+                config.uiText[s] = escapeHTML(initialConfig.strings[s]);
               }
             }
           } else {
@@ -2172,8 +2167,8 @@ export default (function(window, document, undefined) {
         infoDisplay.container.style.display = "none";
 
       // Fill in load button label and loading box text
-      controls.load.innerHTML = "<p>" + config.strings.loadButtonLabel + "</p>";
-      infoDisplay.load.boxp.innerHTML = config.strings.loadingLabel;
+      controls.load.innerHTML = "<p>" + config.uiText.loadButtonLabel + "</p>";
+      infoDisplay.load.boxp.innerHTML = config.uiText.loadingLabel;
 
       // Process other options
       for (var key in config) {
@@ -2185,7 +2180,7 @@ export default (function(window, document, undefined) {
               break;
 
             case "author":
-              infoDisplay.author.innerHTML = config.strings.bylineLabel.replace(
+              infoDisplay.author.innerHTML = config.uiText.bylineLabel.replace(
                 "%s",
                 escapeHTML(config[key])
               );
@@ -2938,13 +2933,30 @@ export default (function(window, document, undefined) {
     };
 
     /**
-     * Get ID of current scene.
+     * Get ID and config of current scene.
      * @memberof Viewer
      * @instance
-     * @returns {string} ID of current scene
+     * @returns {string, object} ID and config of current scene.
      */
-    this.getScene = function() {
-      return config.scene;
+    this.getCurrentScene = function() {
+      return {
+        currentSceneId: config.scene,
+        sceneConfig: config.scenes[config.scene]
+      };
+    };
+
+    /**
+     * Get scene(s) existed, included new scene.
+     * @memberof Viewer
+     * @instance
+     * @returns {array, object} IDs and config of scenes.
+     */
+    this.getAllScenes = function() {
+      const arrayID = Object.keys(config.scenes);
+      return {
+        listID: arrayID,
+        scenesConfig: config.scenes
+      };
     };
 
     /**
@@ -2956,7 +2968,7 @@ export default (function(window, document, undefined) {
      * @returns {Viewer} `this`
      */
     this.addScene = function(sceneId, config) {
-      initialConfig.scenes[sceneId] = config;
+      initialConfig.scenes[sceneId] = { ...config, ...defaultConfig };
       return this;
     };
 
@@ -3262,12 +3274,9 @@ export default (function(window, document, undefined) {
       uiContainer.classList.remove("pnlm-grabbing");
     };
   }
-
   return {
     viewer: function(container, config) {
-      setTimeout(() => {
-        return new Viewer(container, config);
-      }, 300);
+      return new Viewer(container, config);
     }
   };
 })(
