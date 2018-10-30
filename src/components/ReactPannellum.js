@@ -82,9 +82,167 @@ class ReactPannellum extends React.Component {
     }
   }
 
-  static addScene(sceneId, config) {
+  static isLoaded() {
+    return myPannellum && myPannellum.isLoaded();
+  }
+
+  static getPitch() {
+    return myPannellum && myPannellum.getPitch();
+  }
+
+  static setPitch(pitch, animated = 1000, callback, callbackArgs) {
     if (myPannellum) {
-      myPannellum.addScene(sceneId, config);
+      myPannellum.setPitch(pitch, animated, callback, callbackArgs);
+    }
+  }
+
+  static getPitchBounds() {
+    return myPannellum && myPannellum.getPitchBounds();
+  }
+
+  static setPitchBounds(bounds) {
+    if (myPannellum) {
+      myPannellum.setPitchBounds(bounds);
+    }
+  }
+
+  static getYaw() {
+    return myPannellum && myPannellum.getYaw();
+  }
+
+  static setYaw(yaw, animated = 1000, callback, callbackArgs) {
+    if (myPannellum) {
+      myPannellum.setYaw(yaw, animated, callback, callbackArgs);
+    }
+  }
+
+  static getYawBounds() {
+    return myPannellum && myPannellum.getYawBounds();
+  }
+
+  static setYawBounds(bounds) {
+    constants
+      .myPromise(myPannellum)
+      .then(({ bounds }) => {
+        myPannellum.setYawBounds(bounds);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  static getHfov() {
+    return myPannellum && myPannellum.getHfov();
+  }
+
+  static setHfov(hfov, animated = 1000, callback, callbackArgs) {
+    if (myPannellum) {
+      myPannellum.setHfov(hfov, animated, callback, callbackArgs);
+    }
+  }
+
+  static getHfovBounds() {
+    return myPannellum && myPannellum.getHfovBounds();
+  }
+
+  static setHfovBounds(bounds) {
+    constants
+      .myPromise(myPannellum)
+      .then(({ bounds }) => {
+        myPannellum.setHfovBounds(bounds);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  static lookAt(pitch, yaw, hfov, animated = 1000, callback, callbackArgs) {
+    if (myPannellum) {
+      myPannellum.lookAt(pitch, yaw, hfov, animated, callback, callbackArgs);
+    }
+  }
+
+  static getNorthOffset() {
+    return myPannellum && myPannellum.getNorthOffset();
+  }
+
+  static setNorthOffset(heading) {
+    constants
+      .myPromise(myPannellum)
+      .then(({ heading }) => {
+        myPannellum.setNorthOffset(heading);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  static getHorizonRoll() {
+    return myPannellum && myPannellum.getHorizonRoll();
+  }
+
+  static setHorizonRoll(roll) {
+    constants
+      .myPromise(myPannellum)
+      .then(({ roll }) => {
+        myPannellum.setHorizonRoll(roll);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  static getHorizonPitch() {
+    return myPannellum && myPannellum.getHorizonPitch();
+  }
+
+  static setHorizonPitch(pitch) {
+    constants
+      .myPromise(myPannellum)
+      .then(({ pitch }) => {
+        myPannellum.setHorizonPitch(pitch);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  static startAutoRotate(speed) {
+    constants
+      .myPromise(myPannellum)
+      .then(({ pitch }) => {
+        myPannellum.startAutoRotate(speed);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  static stopAutoRotate() {
+    if (myPannellum) {
+      myPannellum.stopAutoRotate();
+    }
+  }
+
+  static mouseEventToCoords(event) {
+    return myPannellum && myPannellum.mouseEventToCoords(event);
+  }
+
+  static addScene(sceneId, config, callback) {
+    if (sceneId && sceneId !== "" && (config && config !== {})) {
+      constants
+        .myPromise(myPannellum, { sceneId, config, callback })
+        .then(({ sceneId, config, callback }) => {
+          myPannellum.addScene(sceneId, config);
+          callback && callback();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      console.log(
+        "sceneId cannot be empty and config.imageSource cannot be empty!!"
+      );
     }
   }
 
@@ -96,17 +254,82 @@ class ReactPannellum extends React.Component {
     return myPannellum && myPannellum.getAllScenes();
   }
 
+  static removeScene(sceneId, callback) {
+    if (sceneId && sceneId !== "") {
+      constants
+        .myPromise(myPannellum)
+        .then(({ sceneId }) => {
+          myPannellum.removeScene(sceneId);
+          callback && callback();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      console.log("sceneId cannot be empty");
+    }
+  }
+
+  static loadScene(sceneId, targetPitch, targetYaw, targetHfov, fadeDone) {
+    if (myPannellum && sceneId && sceneId !== "") {
+      myPannellum.loadScene(
+        sceneId,
+        targetPitch,
+        targetYaw,
+        targetHfov,
+        fadeDone
+      );
+    }
+  }
+
+  static toggleFullscreen() {
+    return myPannellum && myPannellum.toggleFullscreen();
+  }
+
+  static getConfig() {
+    return myPannellum && myPannellum.getConfig();
+  }
+
+  static getContainer() {
+    return myPannellum && myPannellum.getContainer();
+  }
+
+  static addHotSpot(hotspot, sceneId) {
+    if (hotspot !== {}) {
+      constants
+        .myPromise(myPannellum)
+        .then(({ hotspot, sceneId }) => {
+          myPannellum.addHotSpot(hotspot, sceneId);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      console.log(
+        "hotspot cannot be empty, please check hotspot elements needed in document: config props `hotSpots`."
+      );
+    }
+  }
+
+  static removeHotSpot(hotspotId) {
+    if (hotspotId !== "") {
+      constants
+        .myPromise(myPannellum)
+        .then(({ sceneId }) => {
+          myPannellum.removeHotSpot(sceneId);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      console.log("hotspotId cannot be empty!!");
+    }
+  }
+
   render() {
     const { style, className } = this.props;
     return <div id="react-pannellum" style={style} className={className} />;
   }
 }
 
-const addScene = ReactPannellum.addScene;
-
-const getCurrentScene = ReactPannellum.getCurrentScene;
-
-const getAllScenes = ReactPannellum.getAllScenes;
-
-export default { ReactPannellum, addScene, getCurrentScene, getAllScenes };
-export { ReactPannellum, addScene, getCurrentScene, getAllScenes };
+export default ReactPannellum;

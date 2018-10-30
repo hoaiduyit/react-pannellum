@@ -2617,6 +2617,9 @@ export default (function(window, document, undefined) {
      * @returns {Viewer} `this`
      */
     this.setPitchBounds = function(bounds) {
+      if (bounds === []) {
+        return;
+      }
       config.minPitch = Math.max(-90, Math.min(bounds[0], 90));
       config.maxPitch = Math.max(-90, Math.min(bounds[1], 90));
       return this;
@@ -2683,6 +2686,9 @@ export default (function(window, document, undefined) {
      * @returns {Viewer} `this`
      */
     this.setYawBounds = function(bounds) {
+      if (bounds === []) {
+        return;
+      }
       config.minYaw = Math.max(-180, Math.min(bounds[0], 180));
       config.maxYaw = Math.max(-180, Math.min(bounds[1], 180));
       return this;
@@ -2745,6 +2751,9 @@ export default (function(window, document, undefined) {
      * @returns {Viewer} `this`
      */
     this.setHfovBounds = function(bounds) {
+      if (bounds !== []) {
+        return;
+      }
       config.minHfov = Math.max(0, bounds[0]);
       config.maxHfov = Math.max(0, bounds[1]);
       return this;

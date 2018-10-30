@@ -1,12 +1,30 @@
 import React from "react";
-import { ReactPannellum, addScene, getAllScenes } from "react-pannellum";
+import ReactPannellum, {
+  addScene,
+  getAllScenes,
+  loadScene,
+  getConfig
+} from "react-pannellum";
 
 export default class App extends React.Component {
+  state = {
+    loaded: false
+  };
+
   onClick() {
-    addScene("secondScene", {
-      imageSource: "https://pannellum.org/images/cerro-toco-0.jpg"
+    this.setState({
+      loaded: true
     });
-    console.log(getAllScenes());
+    addScene(
+      "secondScene",
+      {
+        imageSource: "https://pannellum.org/images/cerro-toco-0.jpg"
+      },
+      () => {
+        loadScene("secondScene");
+        console.log(getConfig());
+      }
+    );
   }
 
   render() {
@@ -18,8 +36,14 @@ export default class App extends React.Component {
           config={{
             autoRotate: -2
           }}
+          style={{
+            width: "100%",
+            height: "90vh"
+          }}
         />
-        <div onClick={this.onClick.bind(this)}>+</div>
+        <div style={{ cursor: "pointer" }} onClick={this.onClick.bind(this)}>
+          +
+        </div>
       </div>
     );
   }
