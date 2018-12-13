@@ -4,10 +4,11 @@ import pannellum from "../libs/pannellum.js";
 import constants from "../utils/constants";
 import "../css/pannellum.css";
 
-let myPannellum = undefined;
 
 class ReactPannellum extends React.Component {
+  myPannellum = null;
   static propTypes = {
+    id: PropTypes.string.isRequired,
     sceneId: PropTypes.string.isRequired,
     imageSource: PropTypes.string.isRequired,
     config: PropTypes.shape({}),
@@ -60,7 +61,7 @@ class ReactPannellum extends React.Component {
       autoRotateSpeep
     } = this.props;
 
-    myPannellum = pannellum.viewer("react-pannellum", {
+    this.myPannellum = pannellum.viewer(this.props.id, {
       default: {
         firstScene: sceneId
       },
@@ -74,57 +75,54 @@ class ReactPannellum extends React.Component {
   }
 
   componentDidMount() {
-    if (!myPannellum && this.props.imageSource) {
-      // make sure that your pannellum has enough time to load
-      setTimeout(() => {
-        this.initPanalleum();
-      }, 100);
+    if (this.props.imageSource) {
+      this.initPanalleum();
     }
   }
 
   static isLoaded() {
-    return myPannellum && myPannellum.isLoaded();
+    return this.myPannellum && this.myPannellum.isLoaded();
   }
 
   static getPitch() {
-    return myPannellum && myPannellum.getPitch();
+    return this.myPannellum && this.myPannellum.getPitch();
   }
 
   static setPitch(pitch, animated = 1000, callback, callbackArgs) {
-    if (myPannellum) {
-      myPannellum.setPitch(pitch, animated, callback, callbackArgs);
+    if (this.myPannellum) {
+      this.myPannellum.setPitch(pitch, animated, callback, callbackArgs);
     }
   }
 
   static getPitchBounds() {
-    return myPannellum && myPannellum.getPitchBounds();
+    return this.myPannellum && this.myPannellum.getPitchBounds();
   }
 
   static setPitchBounds(bounds) {
-    if (myPannellum) {
-      myPannellum.setPitchBounds(bounds);
+    if (this.myPannellum) {
+      this.myPannellum.setPitchBounds(bounds);
     }
   }
 
   static getYaw() {
-    return myPannellum && myPannellum.getYaw();
+    return this.myPannellum && this.myPannellum.getYaw();
   }
 
   static setYaw(yaw, animated = 1000, callback, callbackArgs) {
-    if (myPannellum) {
-      myPannellum.setYaw(yaw, animated, callback, callbackArgs);
+    if (this.myPannellum) {
+      this.myPannellum.setYaw(yaw, animated, callback, callbackArgs);
     }
   }
 
   static getYawBounds() {
-    return myPannellum && myPannellum.getYawBounds();
+    return this.myPannellum && this.myPannellum.getYawBounds();
   }
 
   static setYawBounds(bounds) {
     constants
-      .myPromise(myPannellum)
+      .myPromise(this.myPannellum)
       .then(({ bounds }) => {
-        myPannellum.setYawBounds(bounds);
+        this.myPannellum.setYawBounds(bounds);
       })
       .catch(err => {
         console.log(err);
@@ -132,24 +130,24 @@ class ReactPannellum extends React.Component {
   }
 
   static getHfov() {
-    return myPannellum && myPannellum.getHfov();
+    return this.myPannellum && this.myPannellum.getHfov();
   }
 
   static setHfov(hfov, animated = 1000, callback, callbackArgs) {
-    if (myPannellum) {
-      myPannellum.setHfov(hfov, animated, callback, callbackArgs);
+    if (this.myPannellum) {
+      this.myPannellum.setHfov(hfov, animated, callback, callbackArgs);
     }
   }
 
   static getHfovBounds() {
-    return myPannellum && myPannellum.getHfovBounds();
+    return this.myPannellum && this.myPannellum.getHfovBounds();
   }
 
   static setHfovBounds(bounds) {
     constants
-      .myPromise(myPannellum)
+      .myPromise(this.myPannellum)
       .then(({ bounds }) => {
-        myPannellum.setHfovBounds(bounds);
+        this.myPannellum.setHfovBounds(bounds);
       })
       .catch(err => {
         console.log(err);
@@ -157,20 +155,20 @@ class ReactPannellum extends React.Component {
   }
 
   static lookAt(pitch, yaw, hfov, animated = 1000, callback, callbackArgs) {
-    if (myPannellum) {
-      myPannellum.lookAt(pitch, yaw, hfov, animated, callback, callbackArgs);
+    if (this.myPannellum) {
+      this.myPannellum.lookAt(pitch, yaw, hfov, animated, callback, callbackArgs);
     }
   }
 
   static getNorthOffset() {
-    return myPannellum && myPannellum.getNorthOffset();
+    return this.myPannellum && this.myPannellum.getNorthOffset();
   }
 
   static setNorthOffset(heading) {
     constants
-      .myPromise(myPannellum)
+      .myPromise(this.myPannellum)
       .then(({ heading }) => {
-        myPannellum.setNorthOffset(heading);
+        this.myPannellum.setNorthOffset(heading);
       })
       .catch(err => {
         console.log(err);
@@ -178,14 +176,14 @@ class ReactPannellum extends React.Component {
   }
 
   static getHorizonRoll() {
-    return myPannellum && myPannellum.getHorizonRoll();
+    return this.myPannellum && this.myPannellum.getHorizonRoll();
   }
 
   static setHorizonRoll(roll) {
     constants
-      .myPromise(myPannellum)
+      .myPromise(this.myPannellum)
       .then(({ roll }) => {
-        myPannellum.setHorizonRoll(roll);
+        this.myPannellum.setHorizonRoll(roll);
       })
       .catch(err => {
         console.log(err);
@@ -193,14 +191,14 @@ class ReactPannellum extends React.Component {
   }
 
   static getHorizonPitch() {
-    return myPannellum && myPannellum.getHorizonPitch();
+    return this.myPannellum && this.myPannellum.getHorizonPitch();
   }
 
   static setHorizonPitch(pitch) {
     constants
-      .myPromise(myPannellum)
+      .myPromise(this.myPannellum)
       .then(({ pitch }) => {
-        myPannellum.setHorizonPitch(pitch);
+        this.myPannellum.setHorizonPitch(pitch);
       })
       .catch(err => {
         console.log(err);
@@ -209,9 +207,9 @@ class ReactPannellum extends React.Component {
 
   static startAutoRotate(speed) {
     constants
-      .myPromise(myPannellum)
+      .myPromise(this.myPannellum)
       .then(({ pitch }) => {
-        myPannellum.startAutoRotate(speed);
+        this.myPannellum.startAutoRotate(speed);
       })
       .catch(err => {
         console.log(err);
@@ -219,21 +217,21 @@ class ReactPannellum extends React.Component {
   }
 
   static stopAutoRotate() {
-    if (myPannellum) {
-      myPannellum.stopAutoRotate();
+    if (this.myPannellum) {
+      this.myPannellum.stopAutoRotate();
     }
   }
 
   static mouseEventToCoords(event) {
-    return myPannellum && myPannellum.mouseEventToCoords(event);
+    return this.myPannellum && this.myPannellum.mouseEventToCoords(event);
   }
 
   static addScene(sceneId, config, callback) {
     if (sceneId && sceneId !== "" && (config && config !== {})) {
       constants
-        .myPromise(myPannellum, { sceneId, config, callback })
+        .myPromise(this.myPannellum, { sceneId, config, callback })
         .then(({ sceneId, config, callback }) => {
-          myPannellum.addScene(sceneId, config);
+          this.myPannellum.addScene(sceneId, config);
           callback && callback();
         })
         .catch(err => {
@@ -247,19 +245,19 @@ class ReactPannellum extends React.Component {
   }
 
   static getCurrentScene() {
-    return myPannellum && myPannellum.getCurrentScene();
+    return this.myPannellum && this.myPannellum.getCurrentScene();
   }
 
   static getAllScenes() {
-    return myPannellum && myPannellum.getAllScenes();
+    return this.myPannellum && this.myPannellum.getAllScenes();
   }
 
   static removeScene(sceneId, callback) {
     if (sceneId && sceneId !== "") {
       constants
-        .myPromise(myPannellum)
+        .myPromise(this.myPannellum)
         .then(({ sceneId }) => {
-          myPannellum.removeScene(sceneId);
+          this.myPannellum.removeScene(sceneId);
           callback && callback();
         })
         .catch(err => {
@@ -271,8 +269,8 @@ class ReactPannellum extends React.Component {
   }
 
   static loadScene(sceneId, targetPitch, targetYaw, targetHfov, fadeDone) {
-    if (myPannellum && sceneId && sceneId !== "") {
-      myPannellum.loadScene(
+    if (this.myPannellum && sceneId && sceneId !== "") {
+      this.myPannellum.loadScene(
         sceneId,
         targetPitch,
         targetYaw,
@@ -283,23 +281,23 @@ class ReactPannellum extends React.Component {
   }
 
   static toggleFullscreen() {
-    return myPannellum && myPannellum.toggleFullscreen();
+    return this.myPannellum && this.myPannellum.toggleFullscreen();
   }
 
   static getConfig() {
-    return myPannellum && myPannellum.getConfig();
+    return this.myPannellum && this.myPannellum.getConfig();
   }
 
   static getContainer() {
-    return myPannellum && myPannellum.getContainer();
+    return this.myPannellum && this.myPannellum.getContainer();
   }
 
   static addHotSpot(hotspot, sceneId) {
     if (hotspot !== {}) {
       constants
-        .myPromise(myPannellum)
+        .myPromise(this.myPannellum)
         .then(({ hotspot, sceneId }) => {
-          myPannellum.addHotSpot(hotspot, sceneId);
+          this.myPannellum.addHotSpot(hotspot, sceneId);
         })
         .catch(err => {
           console.log(err);
@@ -314,9 +312,9 @@ class ReactPannellum extends React.Component {
   static removeHotSpot(hotspotId) {
     if (hotspotId !== "") {
       constants
-        .myPromise(myPannellum)
+        .myPromise(this.myPannellum)
         .then(({ sceneId }) => {
-          myPannellum.removeHotSpot(sceneId);
+          this.myPannellum.removeHotSpot(sceneId);
         })
         .catch(err => {
           console.log(err);
@@ -327,8 +325,8 @@ class ReactPannellum extends React.Component {
   }
 
   render() {
-    const { style, className } = this.props;
-    return <div id="react-pannellum" style={style} className={className} />;
+    const { style, className, id } = this.props;
+    return <div id={id} style={style} className={className} />;
   }
 }
 
