@@ -2,27 +2,20 @@ import React from "react";
 import ReactPannellum, {
   addScene,
   loadScene,
-  getConfig
+  addHotSpot
 } from "react-pannellum";
 
 export default class App extends React.Component {
-  state = {
-    loaded: false
-  };
-
   onClick() {
-    this.setState({
-      loaded: true
-    });
-    addScene(
-      "secondScene",
+    addHotSpot(
       {
-        imageSource: "https://pannellum.org/images/cerro-toco-0.jpg"
+        pitch: 14.1,
+        yaw: 1.5,
+        type: "info",
+        text: "Baltimore Museum of Art",
+        URL: "https://artbma.org/"
       },
-      () => {
-        loadScene("secondScene");
-        console.log(getConfig());
-      }
+      "firstScene"
     );
   }
 
@@ -30,6 +23,7 @@ export default class App extends React.Component {
     return (
       <div className="App">
         <ReactPannellum
+          id="test"
           sceneId="firstScene"
           imageSource="https://pannellum.org/images/alma.jpg"
           config={{
@@ -41,7 +35,7 @@ export default class App extends React.Component {
           }}
         />
         <div style={{ cursor: "pointer" }} onClick={this.onClick.bind(this)}>
-          +
+          Add Hostpot
         </div>
       </div>
     );

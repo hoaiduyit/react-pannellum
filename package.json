@@ -1,6 +1,6 @@
 {
   "name": "react-pannellum",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A library show panorama image for react",
   "author": "hoaiduyit",
   "license": "MIT",
@@ -14,7 +14,9 @@
   },
   "scripts": {
     "test": "cross-env CI=1 react-scripts test --env=jsdom",
-    "test:watch": "react-scripts test --env=jsdom"
+    "test:watch": "react-scripts test --env=jsdom",
+    "build": "rollup -c",
+    "start": "rollup -c -w"
   },
   "peerDependencies": {
     "prop-types": "^15.5.4",
