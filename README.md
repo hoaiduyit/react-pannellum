@@ -53,6 +53,8 @@ class Example extends React.Component {
 An unique ID for the first scene.
 ### imageSource (required): string
 Path of image you want to display
+### id (required): string
+Unique id for component
 ### style (optional): object
 Custom style of the panorama image. Default setting:
 ```js
@@ -81,7 +83,7 @@ Make the panorama auto rotate, set a specific ``number`` will enable rotate. Def
 Sets the delay, in milliseconds, to start automatically rotating the panorama after user activity ceases. This parameter only has an effect if the ``autoRotateSpeep`` parameter is set. Defautl to 0.
 ### autoRotateStopDelay (optional): number
 Sets the delay, in milliseconds, to stop automatically rotating the panorama after it is loaded. This parameter only has an effect if the ```autoRotateSpeep``` parameter is set. Default to 0.
-### previewImage (optional): string
+### preview (optional): string
 Specifies a URL for a preview image to display before the panorama is loaded.
 ### uiText (optional): object
 Allows user-facing strings to be changed / translated. Default setting: 
