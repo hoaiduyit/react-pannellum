@@ -1,7 +1,5 @@
 # react-pannellum
 
-> New API event has been out now 🎉🎉🎉
-
 > A library show panorama image for react
 
 > This library use source from [https://pannellum.org/](https://pannellum.org/)
