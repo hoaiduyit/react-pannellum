@@ -1,4 +1,4 @@
-import ReactPannellum from "./components/ReactPannellum";
+import ReactPannellum from './components/ReactPannellum';
 
 const addScene = ReactPannellum.addScene;
 
