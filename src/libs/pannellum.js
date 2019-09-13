@@ -456,7 +456,6 @@ export default (function(window, document, undefined) {
      * @returns {boolean} True if absolute, else false
      */
     function absoluteURL(url) {
-      console.log('url', url)
       // From http://stackoverflow.com/a/19709846
       return (
         new RegExp("^(?:[a-z]+:)?//", "i").test(url) ||
