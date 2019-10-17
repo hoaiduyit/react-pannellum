@@ -21,18 +21,17 @@
   outline: 0;
   line-height: 1.4;
   contain: content;
-  touch-action: none
 }
 
 .pnlm-container * {
-  box-sizing: content-box
+  box-sizing: content-box;
 }
 
 .pnlm-ui {
   position: absolute;
   width: 100%;
   height: 100%;
-  z-index: 1
+  z-index: 1;
 }
 
 .pnlm-grab {
@@ -52,60 +51,60 @@
 .pnlm-container:-moz-full-screen {
   height: 100% !important;
   width: 100% !important;
-  position: static !important
+  position: static !important;
 }
-
 .pnlm-container:-webkit-full-screen {
   height: 100% !important;
   width: 100% !important;
-  position: static !important
+  position: static !important;
 }
-
 .pnlm-container:-ms-fullscreen {
   height: 100% !important;
   width: 100% !important;
-  position: static !important
+  position: static !important;
 }
-
 .pnlm-container:fullscreen {
   height: 100% !important;
   width: 100% !important;
-  position: static !important
+  position: static !important;
 }
 
 .pnlm-render-container {
   cursor: inherit;
+
+  /* Fix display bug in Safari 7 */
   position: absolute;
   height: 100%;
-  width: 100%
+  width: 100%;
 }
 
 .pnlm-controls {
   margin-top: 4px;
   background-color: #fff;
   border: 1px solid #999;
-  border-color: rgba(0, 0, 0, 0.4);
+  border-color: rgba(0,0,0,0.4);
   border-radius: 3px;
   cursor: pointer;
   z-index: 2;
+  /* Fix Safari fullscreen bug */
   -webkit-transform: translateZ(9999px);
-  transform: translateZ(9999px)
+  transform: translateZ(9999px);
 }
 
 .pnlm-control:hover {
-  background-color: #f8f8f8
+  background-color: #f8f8f8;
 }
 
 .pnlm-controls-container {
   position: absolute;
   top: 0;
   left: 4px;
-  z-index: 1
+  z-index: 1;
 }
 
 .pnlm-zoom-controls {
   width: 26px;
-  height: 52px
+  height: 52px;
 }
 
 .pnlm-zoom-in {
@@ -113,7 +112,7 @@
   height: 50%;
   position: absolute;
   top: 0;
-  border-radius: 3px 3px 0 0
+  border-radius: 3px 3px 0 0;
 }
 
 .pnlm-zoom-out {
@@ -123,15 +122,13 @@
   bottom: 0;
   background-position: 0 -26px;
   border-top: 1px solid #ddd;
-  border-top-color: rgba(0, 0, 0, 0.10);
-  border-radius: 0 0 3px 3px
+  border-top-color: rgba(0,0,0,0.10);
+  border-radius: 0 0 3px 3px;
 }
 
-.pnlm-fullscreen-toggle-button,
-.pnlm-orientation-button,
-.pnlm-hot-spot-debug-indicator {
+.pnlm-fullscreen-toggle-button, .pnlm-orientation-button, .pnlm-hot-spot-debug-indicator {
   width: 26px;
-  height: 26px
+  height: 26px;
 }
 
 .pnlm-hot-spot-debug-indicator {
@@ -143,37 +140,38 @@
   margin: -13px 0 0 -13px;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 13px;
-  display: none
+  display: none;
 }
 
 .pnlm-orientation-button-inactive {
-  background-position: 0 -156px
+  background-position: 0 -156px;
 }
 
 .pnlm-orientation-button-active {
-  background-position: 0 -182px
+  background-position: 0 -182px;
 }
 
 .pnlm-fullscreen-toggle-button-inactive {
-  background-position: 0 -52px
+  background-position: 0 -52px;
 }
 
 .pnlm-fullscreen-toggle-button-active {
-  background-position: 0 -78px
+  background-position: 0 -78px;
 }
 
 .pnlm-panorama-info {
   position: absolute;
   bottom: 4px;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0,0,0,0.7);
   border-radius: 0 3px 3px 0;
   padding-right: 10px;
   color: #fff;
   text-align: left;
   display: none;
   z-index: 2;
+  /* Fix Safari fullscreen bug */
   -webkit-transform: translateZ(9999px);
-  transform: translateZ(9999px)
+  transform: translateZ(9999px);
 }
 
 .pnlm-title-box {
@@ -181,14 +179,14 @@
   font-size: 20px;
   display: table;
   padding-left: 5px;
-  margin-bottom: 3px
+  margin-bottom: 3px;
 }
 
 .pnlm-author-box {
   position: relative;
   font-size: 12px;
   display: table;
-  padding-left: 5px
+  padding-left: 5px;
 }
 
 .pnlm-load-box {
@@ -198,16 +196,16 @@
   width: 200px;
   height: 150px;
   margin: -75px 0 0 -100px;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0,0,0,0.7);
   border-radius: 3px;
   text-align: center;
   font-size: 20px;
   display: none;
-  color: #fff
+  color: #fff;
 }
 
 .pnlm-load-box p {
-  margin: 20px 0
+  margin: 20px 0;
 }
 
 .pnlm-lbox {
@@ -217,7 +215,7 @@
   width: 20px;
   height: 20px;
   margin: -10px 0 0 -10px;
-  display: none
+  display: none;
 }
 
 .pnlm-loading {
@@ -232,53 +230,23 @@
   height: 10px;
   width: 10px;
   background-color: #fff;
-  position: relative
+  position: relative;
 }
 
 @keyframes pnlm-mv {
-  from {
-    left: 0;
-    top: 0
-  }
-  25% {
-    left: 10px;
-    top: 0
-  }
-  50% {
-    left: 10px;
-    top: 10px
-  }
-  75% {
-    left: 0;
-    top: 10px
-  }
-  to {
-    left: 0;
-    top: 0
-  }
+  from {left:0;top:0;}
+  25% {left:10px;top:0;}
+  50% {left:10px;top:10px;}
+  75% {left:0;top:10px;}
+  to {left:0;top:0;}
 }
 
 @-webkit-keyframes pnlm-mv {
-  from {
-    left: 0;
-    top: 0
-  }
-  25% {
-    left: 10px;
-    top: 0
-  }
-  50% {
-    left: 10px;
-    top: 10px
-  }
-  75% {
-    left: 0;
-    top: 10px
-  }
-  to {
-    left: 0;
-    top: 0
-  }
+  from {left:0;top:0;}
+  25% {left:10px;top:0;}
+  50% {left:10px;top:10px;}
+  75% {left:0;top:10px;}
+  to {left:0;top:0;}
 }
 
 .pnlm-load-button {
@@ -288,22 +256,22 @@
   width: 200px;
   height: 100px;
   margin: -50px 0 0 -100px;
-  background-color: rgba(0, 0, 0, .7);
+  background-color: rgba(0,0,0,.7);
   border-radius: 3px;
   text-align: center;
   font-size: 20px;
   display: table;
   color: #fff;
-  cursor: pointer
+  cursor: pointer;
 }
 
 .pnlm-load-button:hover {
-  background-color: rgba(0, 0, 0, .8)
+  background-color: rgba(0,0,0,.8);
 }
 
 .pnlm-load-button p {
   display: table-cell;
-  vertical-align: middle
+  vertical-align: middle;
 }
 
 .pnlm-info-box {
@@ -319,23 +287,23 @@
   display: table;
   text-align: center;
   color: #fff;
-  table-layout: fixed
+  table-layout: fixed;
 }
 
-.pnlm-info-box a {
+.pnlm-info-box a, .pnlm-author-box a {
   color: #fff;
   word-wrap: break-word;
-  overflow-wrap: break-word
+  overflow-wrap: break-word;
 }
 
 .pnlm-info-box p {
   display: table-cell;
   vertical-align: middle;
-  padding: 0 5px 0 5px
+  padding: 0 5px 0 5px;
 }
 
 .pnlm-error-msg {
-  display: none
+  display: none;
 }
 
 .pnlm-about-msg {
@@ -343,7 +311,7 @@
   line-height: 11px;
   color: #fff;
   padding: 5px 8px 5px 8px;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0,0,0,0.7);
   border-radius: 3px;
   position: absolute;
   top: 50px;
@@ -355,17 +323,15 @@
   -o-transition: opacity .3s ease-in-out;
   -ms-transition: opacity .3s ease-in-out;
   transition: opacity .3s ease-in-out;
-  z-index: 1
+  z-index: 1;
 }
 
-.pnlm-about-msg a:link,
-.pnlm-about-msg a:visited {
-  color: #fff
+.pnlm-about-msg a:link, .pnlm-about-msg a:visited {
+  color: #fff;
 }
 
-.pnlm-about-msg a:hover,
-.pnlm-about-msg a:active {
-  color: #eee
+.pnlm-about-msg a:hover, .pnlm-about-msg a:active {
+  color: #eee;
 }
 
 .pnlm-hotspot-base {
@@ -374,44 +340,38 @@
   cursor: default;
   vertical-align: middle;
   top: 0;
-  z-index: 1
+  z-index: 1;
 }
-
 .pnlm-hotspot {
   height: 26px;
   width: 26px;
-  border-radius: 13px
+  border-radius: 13px;
 }
-
 .pnlm-hotspot:hover {
-  background-color: rgba(255, 255, 255, 0.2)
+  background-color: rgba(255,255,255,0.2);
 }
-
 .pnlm-hotspot.pnlm-info {
-  background-position: 0 -104px
+  background-position: 0 -104px;
 }
-
 .pnlm-hotspot.pnlm-scene {
-  background-position: 0 -130px
+  background-position: 0 -130px;
 }
 
 div.pnlm-tooltip span {
   visibility: hidden;
   position: absolute;
   border-radius: 3px;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0,0,0,0.7);
   color: #fff;
   text-align: center;
   max-width: 200px;
   padding: 5px 10px;
   margin-left: -220px;
-  cursor: default
+  cursor: default;
 }
-
-div.pnlm-tooltip:hover span {
-  visibility: visible
+div.pnlm-tooltip:hover span{
+  visibility: visible;
 }
-
 div.pnlm-tooltip:hover span:after {
   content: '';
   position: absolute;
@@ -419,10 +379,10 @@ div.pnlm-tooltip:hover span:after {
   height: 0;
   border-width: 10px;
   border-style: solid;
-  border-color: rgba(0, 0, 0, 0.7) transparent transparent transparent;
+  border-color: rgba(0,0,0,0.7) transparent transparent transparent;
   bottom: -20px;
   left: -10px;
-  margin: 0 50%
+  margin: 0 50%;
 }
 
 .pnlm-compass {
@@ -434,65 +394,54 @@ div.pnlm-tooltip:hover span:after {
   border-radius: 25px;
   background-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20height%3D%2250%22%20width%3D%2250%22%3E%0A%3Cpath%20d%3D%22m24.5078%206-3.2578%2018h7.5l-3.25781-18h-0.984376zm-3.2578%2020%203.2578%2018h0.9844l3.2578-18h-7.5zm1.19531%200.9941h5.10938l-2.5547%2014.1075-2.5547-14.1075z%22%2F%3E%0A%3C%2Fsvg%3E%0A');
   cursor: default;
-  display: none
+  display: none;
 }
 
 .pnlm-world {
   position: absolute;
   left: 50%;
-  top: 50%
+  top: 50%;
 }
-
 .pnlm-face {
   position: absolute;
-  -webkit-transform-origin: 0 0;
-  transform-origin: 0 0
+  -webkit-transform-origin: 0 0 0;
+  transform-origin: 0 0 0;
 }
 
-.pnlm-dragfix,
-.pnlm-preview-img {
+.pnlm-dragfix, .pnlm-preview-img {
   position: absolute;
   height: 100%;
-  width: 100%
+  width: 100%;
 }
 
 .pnlm-preview-img {
   background-size: cover;
-  background-position: center
+  background-position: center;
 }
 
 .pnlm-lbar {
   width: 150px;
   margin: 0 auto;
   border: #fff 1px solid;
-  height: 6px
+  height: 6px;
 }
 
 .pnlm-lbar-fill {
   background: #fff;
   height: 100%;
-  width: 0
+  width: 0;
 }
 
 .pnlm-lmsg {
-  font-size: 12px
+  font-size: 12px;
 }
 
 .pnlm-fade-img {
   position: absolute;
   top: 0;
-  left: 0
+  left: 0;
 }
 
-.pnlm-add-scene {
-  position: absolute;
-  right: 0;
-  z-index: 2;
-  padding-bottom: 3px;
-  padding: 8px 5px;
-  width: 30px;
-  text-align: center;
-  background: rgba(200, 200, 200, 0.8);
-  display: inline-block;
+.pnlm-pointer {
   cursor: pointer;
 }
