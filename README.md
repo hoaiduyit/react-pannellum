@@ -34,6 +34,7 @@ class Example extends React.Component {
     return (
       <div>
         <ReactPannellum 
+          id="1"
           sceneId="firstScene" 
           imageSource="https://pannellum.org/images/alma.jpg" 
           config={config} 
