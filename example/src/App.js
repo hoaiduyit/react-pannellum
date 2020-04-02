@@ -15,6 +15,10 @@ export default class App extends React.Component {
     );
   }
 
+  onPanoramaLoaded() {
+    console.log('Panorama loaded');
+  }
+
   render() {
     return (
       <div className="App">
@@ -29,6 +33,7 @@ export default class App extends React.Component {
             width: '100%',
             height: '90vh'
           }}
+          onPanoramaLoaded={this.onPanoramaLoaded}
         />
         <div style={{ cursor: 'pointer' }} onClick={this.onClick.bind(this)}>
           Add Hostpot
