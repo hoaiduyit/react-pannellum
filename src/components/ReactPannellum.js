@@ -13,7 +13,8 @@ class ReactPannellum extends React.Component {
     imageSource: PropTypes.string.isRequired,
     config: PropTypes.shape({}),
     className: PropTypes.string,
-    style: PropTypes.shape({})
+    style: PropTypes.shape({}),
+    onPanoramaLoaded: PropTypes.func
   };
 
   static defaultProps = {
@@ -77,7 +78,12 @@ class ReactPannellum extends React.Component {
   componentDidMount() {
     if (this.props.imageSource) {
       this.initPanalleum();
+      this.props.onPanoramaLoaded && myPannellum.on('load', () => this.props.onPanoramaLoaded());
     }
+  }
+
+  componentWillUnmount() {
+    myPannellum && this.props.onPanoramaLoaded && myPannellum.off('load', this.props.onPanoramaLoaded);
   }
 
   static isLoaded() {
