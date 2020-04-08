@@ -15,7 +15,8 @@ npm install --save react-pannellum
 ## Usage
 
 1. [Config props](#config)
-2. [API Events](#api)
+2. [API Events](#apiEvents)
+3. [API Event Listeners](#apiEventListeners)
 
 ```jsx
 import React from "react";
@@ -244,7 +245,7 @@ If clickHandlerFunc is specified, this function is added as an event handler for
 
 When `true`, the mouse pointer’s pitch and yaw are logged to the console when the mouse button is clicked. Defaults to `false`.
 
-## <a id="api" ></a> API Events
+## <a id="apiEvents" ></a> API Events
 
 - ### Do not call API event in `componentDidMount` or API event will return undefined.
 
@@ -479,6 +480,12 @@ Parameters:
 - `sceneId` string The ID of the current scene.
 
 Returns `true` if deletion is successful, else `false`.
+
+## <a id="apiEventListeners" ></a> Api Event Listeners
+
+> ### onPanoramaLoaded
+>
+> Will be triggered when panorama is loaded
 
 ## License
 
