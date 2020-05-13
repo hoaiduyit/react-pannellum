@@ -312,9 +312,9 @@ class ReactPannellum extends React.Component {
   static removeHotSpot(hotspotId, sceneId) {
     if (hotspotId !== '') {
       constants
-        .myPromise(myPannellum, { sceneId })
-        .then(({ sceneId }) => {
-          myPannellum.removeHotSpot(sceneId);
+        .myPromise(myPannellum, { hotspotId, sceneId })
+        .then(({ hotspotId, sceneId }) => {
+          myPannellum.removeHotSpot(hotspotId, sceneId);
         })
         .catch(err => {
           console.log(err);
