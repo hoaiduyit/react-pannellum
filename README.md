@@ -29,7 +29,7 @@ class Example extends React.Component {
 
   render() {
     const config = {
-      autoRotate: -2
+      autoRotate: -2,
     };
     return (
       <div>
@@ -84,7 +84,7 @@ Included all default configs below. i.e:
 
 ```js
 config = {
-  autoLoad: true
+  autoLoad: true,
 };
 ```
 
@@ -391,6 +391,8 @@ Parameters:
 Parameters:
 
 - `speed` [number] Auto rotation speed / direction. If not specified, previous value is used.
+
+- `pitch` [number] Horizon pitch in degrees [-90, 90].
 
 > ### stopAutoRotate
 >

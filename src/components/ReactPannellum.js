@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import pannellum from '../libs/pannellum.js';
-import constants from '../utils/constants';
-import '../css/pannellum.css';
+import React from "react";
+import PropTypes from "prop-types";
+import pannellum from "../libs/pannellum.js";
+import constants from "../utils/constants";
+import "../css/pannellum.css";
 
 let myPannellum = null;
 
@@ -14,22 +14,22 @@ class ReactPannellum extends React.Component {
     config: PropTypes.shape({}),
     className: PropTypes.string,
     style: PropTypes.shape({}),
-    onPanoramaLoaded: PropTypes.func
+    onPanoramaLoaded: PropTypes.func,
   };
 
   static defaultProps = {
-    className: '',
+    className: "",
     style: {
-      ...constants.style
+      ...constants.style,
     },
     config: {
       autoLoad: false,
       autoRotate: 0,
       autoRotateInactivityDelay: 0,
       autoRotateStopDelay: 0,
-      preview: '',
+      preview: "",
       uiText: {
-        ...constants.uiText
+        ...constants.uiText,
       },
       showZoomCtrl: true,
       keyboardZoom: true,
@@ -49,8 +49,8 @@ class ReactPannellum extends React.Component {
       compass: false,
       northOffset: 0,
       hotSpots: [],
-      hotSpotDebug: false
-    }
+      hotSpotDebug: false,
+    },
   };
 
   initPanalleum() {
@@ -59,31 +59,34 @@ class ReactPannellum extends React.Component {
       config,
       imageSource,
       autoRotate,
-      autoRotateSpeep
+      autoRotateSpeep,
     } = this.props;
 
     myPannellum = pannellum.viewer(this.props.id, {
       default: {
-        firstScene: sceneId
+        firstScene: sceneId,
       },
       scenes: {
         [sceneId]: {
           ...config,
-          imageSource
-        }
-      }
+          imageSource,
+        },
+      },
     });
   }
 
   componentDidMount() {
     if (this.props.imageSource) {
       this.initPanalleum();
-      this.props.onPanoramaLoaded && myPannellum.on('load', () => this.props.onPanoramaLoaded());
+      this.props.onPanoramaLoaded &&
+        myPannellum.on("load", () => this.props.onPanoramaLoaded());
     }
   }
 
   componentWillUnmount() {
-    myPannellum && this.props.onPanoramaLoaded && myPannellum.off('load', this.props.onPanoramaLoaded);
+    myPannellum &&
+      this.props.onPanoramaLoaded &&
+      myPannellum.off("load", this.props.onPanoramaLoaded);
   }
 
   static isLoaded() {
@@ -130,7 +133,7 @@ class ReactPannellum extends React.Component {
       .then(({ bounds }) => {
         myPannellum.setYawBounds(bounds);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
@@ -155,7 +158,7 @@ class ReactPannellum extends React.Component {
       .then(({ bounds }) => {
         myPannellum.setHfovBounds(bounds);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
@@ -176,7 +179,7 @@ class ReactPannellum extends React.Component {
       .then(({ heading }) => {
         myPannellum.setNorthOffset(heading);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
@@ -191,7 +194,7 @@ class ReactPannellum extends React.Component {
       .then(({ roll }) => {
         myPannellum.setHorizonRoll(roll);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
@@ -206,18 +209,18 @@ class ReactPannellum extends React.Component {
       .then(({ pitch }) => {
         myPannellum.setHorizonPitch(pitch);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
 
-  static startAutoRotate(speed) {
+  static startAutoRotate(speed, pitch) {
     constants
       .myPromise(myPannellum, { pitch })
       .then(({ pitch }) => {
-        myPannellum.startAutoRotate(speed);
+        myPannellum.startAutoRotate(speed, pitch);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
@@ -233,25 +236,25 @@ class ReactPannellum extends React.Component {
   }
 
   static addScene(sceneId, config, callback) {
-    if (sceneId && sceneId !== '' && (config && config !== {})) {
+    if (sceneId && sceneId !== "" && config && config !== {}) {
       constants
         .myPromise(myPannellum, { sceneId, config, callback })
         .then(({ sceneId, config, callback }) => {
           myPannellum.addScene(sceneId, config);
           callback && callback();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     } else {
       console.log(
-        'sceneId cannot be empty and config.imageSource cannot be empty!!'
+        "sceneId cannot be empty and config.imageSource cannot be empty!!"
       );
     }
   }
 
   static getCurrentScene() {
-    return myPannellum && myPannellum.getCurrentScene();
+    return myPannellum && myPannellum.getConfig().scene;
   }
 
   static getAllScenes() {
@@ -259,23 +262,23 @@ class ReactPannellum extends React.Component {
   }
 
   static removeScene(sceneId, callback) {
-    if (sceneId && sceneId !== '') {
+    if (sceneId && sceneId !== "") {
       constants
         .myPromise(myPannellum, { sceneId })
         .then(({ sceneId }) => {
           myPannellum.removeScene(sceneId);
           callback && callback();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     } else {
-      console.log('sceneId cannot be empty');
+      console.log("sceneId cannot be empty");
     }
   }
 
   static loadScene(sceneId, targetPitch, targetYaw, targetHfov, fadeDone) {
-    if (myPannellum && sceneId && sceneId !== '') {
+    if (myPannellum && sceneId && sceneId !== "") {
       myPannellum.loadScene(
         sceneId,
         targetPitch,
@@ -305,28 +308,28 @@ class ReactPannellum extends React.Component {
         .then(({ hotspot, sceneId }) => {
           myPannellum.addHotSpot(hotspot, sceneId);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     } else {
       console.log(
-        'hotspot cannot be empty, please check hotspot elements needed in document: config props `hotSpots`.'
+        "hotspot cannot be empty, please check hotspot elements needed in document: config props `hotSpots`."
       );
     }
   }
 
   static removeHotSpot(hotSpotId, sceneId) {
-    if (hotSpotId !== '') {
+    if (hotSpotId !== "") {
       constants
         .myPromise(myPannellum, { hotSpotId, sceneId })
         .then(({ hotSpotId, sceneId }) => {
           myPannellum.removeHotSpot(hotSpotId, sceneId);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     } else {
-      console.log('hotspotId cannot be empty!!');
+      console.log("hotspotId cannot be empty!!");
     }
   }
 
