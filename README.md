@@ -247,7 +247,7 @@ When `true`, the mouse pointer’s pitch and yaw are logged to the console when 
 
 ## <a id="apiEvents" ></a> API Events
 
-- ### Do not call API event in `componentDidMount` or API event will return undefined.
+### - Do not call API event in `componentDidMount` or API event will return undefined.
 
 > ### isLoaded
 >
