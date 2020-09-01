@@ -483,6 +483,38 @@ Parameters:
 
 Returns `true` if deletion is successful, else `false`.
 
+> ### stopMovement
+>
+> Stops all movement.
+
+> ### resize
+>
+> This method should be called if the viewer's container is resized.
+
+> ### isOrientationSupported
+>
+> Check if device orientation control is supported.
+
+Returns `true` if supported, else `false`.
+
+> ### stopOrientation
+>
+> Stop using device orientation.
+
+> ### startOrientation
+>
+> Start using device orientation (does nothing if not supported).
+
+> ### isOrientationActive
+>
+> Check if device orientation control is currently activated.
+
+Returns `true` if active, else `false`.
+
+> ### destroy
+>
+> Destructor.
+
 ## <a id="apiEventListeners" ></a> Api Event Listeners
 
 > ### onPanoramaLoaded

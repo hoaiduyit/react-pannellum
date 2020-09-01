@@ -54,13 +54,7 @@ class ReactPannellum extends React.Component {
   };
 
   initPanalleum() {
-    const {
-      sceneId,
-      config,
-      imageSource,
-      autoRotate,
-      autoRotateSpeep,
-    } = this.props;
+    const { sceneId, config, imageSource } = this.props;
 
     myPannellum = pannellum.viewer(this.props.id, {
       default: {
@@ -254,7 +248,7 @@ class ReactPannellum extends React.Component {
   }
 
   static getCurrentScene() {
-    return myPannellum && myPannellum.getConfig().scene;
+    return myPannellum && myPannellum.getScene();
   }
 
   static getAllScenes() {
@@ -331,6 +325,34 @@ class ReactPannellum extends React.Component {
     } else {
       console.log("hotspotId cannot be empty!!");
     }
+  }
+
+  static destroy() {
+    return myPannellum && myPannellum.destroy();
+  }
+
+  static stopMovement() {
+    return myPannellum && myPannellum.stopMovement();
+  }
+
+  static resize() {
+    return myPannellum && myPannellum.resize();
+  }
+
+  static isOrientationSupported() {
+    return myPannellum && myPannellum.isOrientationSupported();
+  }
+
+  static stopOrientation() {
+    return myPannellum && myPannellum.stopOrientation();
+  }
+
+  static startOrientation() {
+    return myPannellum && myPannellum.startOrientation();
+  }
+
+  static isOrientationActive() {
+    return myPannellum && myPannellum.isOrientationActive();
   }
 
   render() {

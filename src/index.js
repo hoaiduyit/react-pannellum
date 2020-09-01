@@ -1,4 +1,4 @@
-import ReactPannellum from './components/ReactPannellum';
+import ReactPannellum from "./components/ReactPannellum";
 
 const addScene = ReactPannellum.addScene;
 
@@ -66,6 +66,20 @@ const addHotSpot = ReactPannellum.addHotSpot;
 
 const removeHotSpot = ReactPannellum.removeHotSpot;
 
+const destroy = ReactPannellum.destroy;
+
+const stopMovement = ReactPannellum.stopMovement;
+
+const resize = ReactPannellum.resize;
+
+const isOrientationSupported = ReactPannellum.isOrientationSupported;
+
+const stopOrientation = ReactPannellum.stopOrientation;
+
+const startOrientation = ReactPannellum.startOrientation;
+
+const isOrientationActive = ReactPannellum.isOrientationActive;
+
 export default ReactPannellum;
 
 export {
@@ -101,5 +115,12 @@ export {
   getConfig,
   getContainer,
   addHotSpot,
-  removeHotSpot
+  removeHotSpot,
+  destroy,
+  stopMovement,
+  resize,
+  isOrientationSupported,
+  stopOrientation,
+  startOrientation,
+  isOrientationActive,
 };
