@@ -80,6 +80,8 @@ const startOrientation = ReactPannellum.startOrientation;
 
 const isOrientationActive = ReactPannellum.isOrientationActive;
 
+const getViewer = ReactPannellum.getViewer;
+
 export default ReactPannellum;
 
 export {
@@ -123,4 +125,5 @@ export {
   stopOrientation,
   startOrientation,
   isOrientationActive,
+  getViewer,
 };
