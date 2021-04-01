@@ -406,8 +406,10 @@ class ReactPannellum extends React.Component {
   }
 
   render() {
-    const { style, className, id } = this.props;
-    return <div id={id} style={style} className={className} />;
+    const { style, className, id, children } = this.props;
+    return (
+      <div id={id} style={style} className={className} children={children} />
+    );
   }
 }
 
