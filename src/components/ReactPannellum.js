@@ -355,6 +355,10 @@ class ReactPannellum extends React.Component {
     return myPannellum && myPannellum.isOrientationActive();
   }
 
+  static getViewer() {
+    return myPannellum;
+  }
+
   render() {
     const { style, className, id } = this.props;
     return <div id={id} style={style} className={className} />;
