@@ -102,7 +102,7 @@ export default (function (window, document, undefined) {
     // Translatable / configurable strings
     // Some strings contain '%s', which is a placeholder for inserted values
     // When setting strings in external configuration, `\n` should be used instead of `<br>` to insert line breaks
-    defaultConfig.strings = {
+    defaultConfig.uiText = {
       // Labels
       loadButtonLabel: "Click to<br>Load<br>Panorama",
       loadingLabel: "Loading...",
@@ -414,9 +414,7 @@ export default (function (window, document, undefined) {
               var a = document.createElement("a");
               a.href = p;
               a.textContent = a.href;
-              anError(
-                config.strings.fileAccessError.replace("%s", a.outerHTML)
-              );
+              anError(config.uiText.fileAccessError.replace("%s", a.outerHTML));
             }
             var img = this.response;
             parseGPanoXMP(img);
@@ -453,7 +451,7 @@ export default (function (window, document, undefined) {
             xhr.open("GET", p, true);
           } catch (e) {
             // Malformed URL
-            anError(config.strings.malformedURLError);
+            anError(config.uiText.malformedURLError);
           }
           xhr.responseType = "blob";
           xhr.setRequestHeader("Accept", "image/*,*/*;q=0.9");
@@ -588,7 +586,7 @@ export default (function (window, document, undefined) {
         ) {
           var flagIndex = img.indexOf("\xff\xc2");
           if (flagIndex < 0 || flagIndex > 65536)
-            anError(config.strings.iOS8WebGLError);
+            anError(config.uiText.iOS8WebGLError);
         }
 
         var start = img.indexOf("<x:xmpmeta");
@@ -680,7 +678,7 @@ export default (function (window, document, undefined) {
      *      generic WebGL error is displayed.
      */
     function anError(errorMsg) {
-      if (errorMsg === undefined) errorMsg = config.strings.genericWebGLError;
+      if (errorMsg === undefined) errorMsg = config.uiText.genericWebGLError;
       infoDisplay.errorMsg.innerHTML = "<p>" + errorMsg + "</p>";
       controls.load.style.display = "none";
       infoDisplay.load.box.style.display = "none";
@@ -1883,12 +1881,12 @@ export default (function (window, document, undefined) {
           anError();
         } else if (event.type === "webgl size error") {
           anError(
-            config.strings.textureSizeError
+            config.uiText.textureSizeError
               .replace("%s", event.width)
               .replace("%s", event.maxWidth)
           );
         } else {
-          anError(config.strings.unknownError);
+          anError(config.uiText.unknownError);
           throw event;
         }
       }
@@ -2182,12 +2180,10 @@ export default (function (window, document, undefined) {
       // Merge default scene config
       for (k in initialConfig.default) {
         if (initialConfig.default.hasOwnProperty(k)) {
-          if (k === "strings") {
-            for (s in initialConfig.default.strings) {
-              if (initialConfig.default.strings.hasOwnProperty(s)) {
-                config.strings[s] = escapeHTML(
-                  initialConfig.default.strings[s]
-                );
+          if (k === "uiText") {
+            for (s in initialConfig.default.uiText) {
+              if (initialConfig.default.uiText.hasOwnProperty(s)) {
+                config.uiText[s] = escapeHTML(initialConfig.default.uiText[s]);
               }
             }
           } else {
@@ -2209,10 +2205,10 @@ export default (function (window, document, undefined) {
         var scene = initialConfig.scenes[sceneId];
         for (k in scene) {
           if (scene.hasOwnProperty(k)) {
-            if (k === "strings") {
-              for (s in scene.strings) {
-                if (scene.strings.hasOwnProperty(s)) {
-                  config.strings[s] = escapeHTML(scene.strings[s]);
+            if (k === "uiText") {
+              for (s in scene.uiText) {
+                if (scene.uiText.hasOwnProperty(s)) {
+                  config.uiText[s] = escapeHTML(scene.uiText[s]);
                 }
               }
             } else {
@@ -2229,10 +2225,10 @@ export default (function (window, document, undefined) {
       // Merge initial config
       for (k in initialConfig) {
         if (initialConfig.hasOwnProperty(k)) {
-          if (k === "strings") {
-            for (s in initialConfig.strings) {
-              if (initialConfig.strings.hasOwnProperty(s)) {
-                config.strings[s] = escapeHTML(initialConfig.strings[s]);
+          if (k === "uiText") {
+            for (s in initialConfig.uiText) {
+              if (initialConfig.uiText.hasOwnProperty(s)) {
+                config.uiText[s] = escapeHTML(initialConfig.uiText[s]);
               }
             }
           } else {
@@ -2269,23 +2265,29 @@ export default (function (window, document, undefined) {
       var title = config.title,
         author = config.author,
         description = config.description;
-      
+
       if (isPreview) {
         if ("previewTitle" in config) config.title = config.previewTitle;
-        if ("previewDescription" in config) config.description = config.previewDescription;
+        if ("previewDescription" in config)
+          config.description = config.previewDescription;
         if ("previewAuthor" in config) config.author = config.previewAuthor;
       }
 
       // Reset title / author display
       if (!config.hasOwnProperty("title")) infoDisplay.title.innerHTML = "";
-      if (!config.hasOwnProperty("description")) infoDisplay.description.innerHTML = "";
+      if (!config.hasOwnProperty("description"))
+        infoDisplay.description.innerHTML = "";
       if (!config.hasOwnProperty("author")) infoDisplay.author.innerHTML = "";
-      if (!config.hasOwnProperty("title") && !config.hasOwnProperty("description") && !config.hasOwnProperty("author"))
+      if (
+        !config.hasOwnProperty("title") &&
+        !config.hasOwnProperty("description") &&
+        !config.hasOwnProperty("author")
+      )
         infoDisplay.container.style.display = "none";
 
       // Fill in load button label and loading box text
-      controls.load.innerHTML = "<p>" + config.strings.loadButtonLabel + "</p>";
-      infoDisplay.load.boxp.innerHTML = config.strings.loadingLabel;
+      controls.load.innerHTML = "<p>" + config.uiText.loadButtonLabel + "</p>";
+      infoDisplay.load.boxp.innerHTML = config.uiText.loadingLabel;
 
       // Process other options
       for (var key in config) {
@@ -2308,7 +2310,7 @@ export default (function (window, document, undefined) {
                 authorLink.innerHTML = escapeHTML(config[key]);
                 authorText = authorLink.outerHTML;
               }
-              infoDisplay.author.innerHTML = config.strings.bylineLabel.replace(
+              infoDisplay.author.innerHTML = config.uiText.bylineLabel.replace(
                 "%s",
                 authorText
               );
