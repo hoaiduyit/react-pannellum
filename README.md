@@ -1,6 +1,6 @@
 # react-pannellum
 
-## Version `0.2.1` with a lot of changes
+## Version `0.2.x` with a lot of changes
 
 > A library show panorama image for react
 
