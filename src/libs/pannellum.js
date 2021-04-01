@@ -126,26 +126,6 @@ export default (function (window, document, undefined) {
       unknownError: "Unknown error. Check developer console.",
     };
 
-    var usedKeyNumbers = [
-      16,
-      17,
-      27,
-      37,
-      38,
-      39,
-      40,
-      61,
-      65,
-      68,
-      83,
-      87,
-      107,
-      109,
-      173,
-      187,
-      189,
-    ];
-
     // Initialize container
     container =
       typeof container === "string"
@@ -190,6 +170,9 @@ export default (function (window, document, undefined) {
     infoDisplay.title = document.createElement("div");
     infoDisplay.title.className = "pnlm-title-box";
     infoDisplay.container.appendChild(infoDisplay.title);
+    infoDisplay.description = document.createElement("div");
+    infoDisplay.description.className = "pnlm-description-box";
+    infoDisplay.container.appendChild(infoDisplay.description);
     infoDisplay.author = document.createElement("div");
     infoDisplay.author.className = "pnlm-author-box";
     infoDisplay.container.appendChild(infoDisplay.author);
@@ -2284,16 +2267,20 @@ export default (function (window, document, undefined) {
 
       // Handle different preview values
       var title = config.title,
-        author = config.author;
+        author = config.author,
+        description = config.description;
+      
       if (isPreview) {
         if ("previewTitle" in config) config.title = config.previewTitle;
+        if ("previewDescription" in config) config.description = config.previewDescription;
         if ("previewAuthor" in config) config.author = config.previewAuthor;
       }
 
       // Reset title / author display
       if (!config.hasOwnProperty("title")) infoDisplay.title.innerHTML = "";
+      if (!config.hasOwnProperty("description")) infoDisplay.description.innerHTML = "";
       if (!config.hasOwnProperty("author")) infoDisplay.author.innerHTML = "";
-      if (!config.hasOwnProperty("title") && !config.hasOwnProperty("author"))
+      if (!config.hasOwnProperty("title") && !config.hasOwnProperty("description") && !config.hasOwnProperty("author"))
         infoDisplay.container.style.display = "none";
 
       // Fill in load button label and loading box text
@@ -2308,7 +2295,10 @@ export default (function (window, document, undefined) {
               infoDisplay.title.innerHTML = escapeHTML(config[key]);
               infoDisplay.container.style.display = "inline";
               break;
-
+            case "description":
+              infoDisplay.description.innerHTML = escapeHTML(config[key]);
+              infoDisplay.container.style.display = "inline";
+              break;
             case "author":
               var authorText = escapeHTML(config[key]);
               if (config.authorURL) {
@@ -2407,6 +2397,8 @@ export default (function (window, document, undefined) {
         // Restore original values if changed for preview
         if (title) config.title = title;
         else delete config.title;
+        if (description) config.description = description;
+        else delete config.description;
         if (author) config.author = author;
         else delete config.author;
       }

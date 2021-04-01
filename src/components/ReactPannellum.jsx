@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import pannellum from "../libs/pannellum.js";
-import constants from "../utils/constants";
+import { myPromise } from "../utils/utils";
+import { configs } from "../utils/constants";
 import "../css/pannellum.css";
 
 let myPannellum = null;
@@ -10,7 +11,19 @@ class ReactPannellum extends React.Component {
   static propTypes = {
     id: PropTypes.string.isRequired,
     sceneId: PropTypes.string.isRequired,
-    imageSource: PropTypes.string.isRequired,
+    type: PropTypes.string,
+    imageSource: PropTypes.string,
+    equirectangularOptions: PropTypes.shape({}),
+    cubeMap: PropTypes.arrayOf(PropTypes.string),
+    multiRes: PropTypes.shape({
+      basePath: PropTypes.string,
+      path: PropTypes.string,
+      fallbackPath: PropTypes.string,
+      extension: PropTypes.string,
+      tileResolution: PropTypes.number,
+      maxLevel: PropTypes.number,
+      cubeResolution: PropTypes.number,
+    }),
     config: PropTypes.shape({}),
     className: PropTypes.string,
     style: PropTypes.shape({}),
@@ -18,63 +31,96 @@ class ReactPannellum extends React.Component {
   };
 
   static defaultProps = {
+    type: "equirectangular",
+    imageSource: "",
+    equirectangularOptions: {},
+    cubeMap: [],
+    multiRes: {},
     className: "",
-    style: {
-      ...constants.style,
-    },
-    config: {
-      autoLoad: false,
-      autoRotate: 0,
-      autoRotateInactivityDelay: 0,
-      autoRotateStopDelay: 0,
-      preview: "",
-      uiText: {
-        ...constants.uiText,
-      },
-      showZoomCtrl: true,
-      keyboardZoom: true,
-      mouseZoom: true,
-      doubleClickZoom: false,
-      draggable: true,
-      disableKeyboardCtrl: false,
-      showFullscreenCtrl: true,
-      showControls: true,
-      yaw: 0,
-      pitch: 0,
-      maxPitch: 90,
-      minPitch: -90,
-      maxYaw: 180,
-      minYaw: -180,
-      hfov: 100,
-      compass: false,
-      northOffset: 0,
-      hotSpots: [],
-      hotSpotDebug: false,
-    },
+    style: configs.styles,
+    config: {},
   };
 
-  initPanalleum() {
-    const { sceneId, config, imageSource } = this.props;
+  state = {
+    imageSource: "",
+    equirectangularOptions: {},
+    cubeMap: [],
+    multiRes: {},
+  };
 
+  init = () => {
+    const {
+      imageSource,
+      equirectangularOptions,
+      cubeMap,
+      multiRes,
+    } = this.state;
+    const { sceneId, config, type } = this.props;
     myPannellum = pannellum.viewer(this.props.id, {
       default: {
         firstScene: sceneId,
       },
       scenes: {
         [sceneId]: {
+          ...configs.panoramaConfigs,
+          ...configs.equirectangularOptions,
+          ...configs.uiText,
           ...config,
+          type,
           imageSource,
+          ...equirectangularOptions,
+          cubeMap,
+          multiRes,
         },
       },
     });
+  };
+
+  initPanalleum() {
+    const {
+      imageSource,
+      type,
+      cubeMap,
+      multiRes,
+      equirectangularOptions,
+    } = this.props;
+    switch (type) {
+      case "equirectangular":
+        this.setState(
+          {
+            imageSource,
+            equirectangularOptions,
+            cubeMap: [],
+          },
+          () => this.init()
+        );
+        break;
+      case "cubemap":
+        this.setState(
+          {
+            cubeMap,
+            imageSource: "",
+          },
+          () => this.init()
+        );
+      case "multires":
+        this.setState(
+          {
+            cubeMap: [],
+            imageSource: "",
+            multiRes,
+          },
+          () => this.init()
+        );
+      default:
+        break;
+    }
   }
 
   componentDidMount() {
-    if (this.props.imageSource) {
-      this.initPanalleum();
-      this.props.onPanoramaLoaded &&
-        myPannellum.on("load", () => this.props.onPanoramaLoaded());
-    }
+    this.initPanalleum();
+    this.props.onPanoramaLoaded &&
+      myPannellum.on("load", () => this.props.onPanoramaLoaded());
   }
 
   componentWillUnmount() {

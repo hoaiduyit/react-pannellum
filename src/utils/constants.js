@@ -1,40 +1,57 @@
-const uiText = {
-  loadButtonLabel: 'Click to<br>Load<br>Panorama',
-  loadingLabel: 'Loading...',
-  bylineLabel: 'by %s',
-  noPanoramaError: 'No panorama image was specified.',
-  fileAccessError: 'The file %s could not be accessed.',
-  malformedURLError: 'There is something wrong with the panorama URL.',
-  iOS8WebGLError:
-    "Due to iOS 8's broken WebGL implementation, only progressive encoded JPEGs work for your device (this panorama uses standard encoding).",
-  genericWebGLError:
-    'Your browser does not have the necessary WebGL support to display this panorama.',
-  textureSizeError:
-    "This panorama is too big for your device! It's %spx wide, but your device only supports images up to %spx wide. Try another device. (If you're the author, try scaling down the image.)",
-  unknownError: 'Unknown error. Check developer console.'
+export const configs = {
+  uiText: {
+    loadButtonLabel: "Click to<br>Load<br>Panorama",
+    loadingLabel: "Loading...",
+    bylineLabel: "by %s",
+    noPanoramaError: "No panorama image was specified.",
+    fileAccessError: "The file %s could not be accessed.",
+    malformedURLError: "There is something wrong with the panorama URL.",
+    iOS8WebGLError:
+      "Due to iOS 8's broken WebGL implementation, only progressive encoded JPEGs work for your device (this panorama uses standard encoding).",
+    genericWebGLError:
+      "Your browser does not have the necessary WebGL support to display this panorama.",
+    textureSizeError:
+      "This panorama is too big for your device! It's %spx wide, but your device only supports images up to %spx wide. Try another device. (If you're the author, try scaling down the image.)",
+    unknownError: "Unknown error. Check developer console.",
+  },
+  styles: {
+    width: "600px",
+    height: "400px",
+    background: "#000000",
+  },
+  equirectangularOptions: {
+    haov: 360,
+    vaov: 180,
+    vOffset: 0,
+    ignoreGPanoXMP: false,
+  },
+  panoramaConfigs: {
+    title: "",
+    author: "",
+    description: "",
+    autoLoad: false,
+    autoRotate: 0,
+    autoRotateInactivityDelay: 0,
+    autoRotateStopDelay: 0,
+    preview: "",
+    showZoomCtrl: true,
+    keyboardZoom: true,
+    mouseZoom: true,
+    doubleClickZoom: false,
+    draggable: true,
+    disableKeyboardCtrl: false,
+    showFullscreenCtrl: true,
+    showControls: true,
+    yaw: 0,
+    pitch: 0,
+    maxPitch: 90,
+    minPitch: -90,
+    maxYaw: 180,
+    minYaw: -180,
+    hfov: 100,
+    compass: false,
+    northOffset: 0,
+    hotSpots: [],
+    hotSpotDebug: false,
+  },
 };
-
-const style = {
-  width: '600px',
-  height: '400px',
-  background: '#000000'
-};
-
-function myPromise(condition, ...args) {
-  const promise = new Promise((resolve, reject) => {
-    if (condition) {
-      if (args !== []) {
-        resolve(...args);
-      } else {
-        reject('Argruments cannot be empty');
-      }
-    } else {
-      reject('Something when wrong!!!');
-    }
-  });
-
-  return promise;
-}
-
-export default { uiText, style, myPromise };
-export { uiText, style, myPromise };

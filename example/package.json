@@ -6,10 +6,10 @@
   "private": true,
   "dependencies": {
     "prop-types": "^15.6.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
     "react-pannellum": "file:..",
-    "react-scripts": "^1.1.4"
+    "react-scripts": "4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -33,5 +33,17 @@
     "braces": "^2.3.1",
     "js-yaml": "^3.13.1",
     "webpack-dev-server": "^3.1.11"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

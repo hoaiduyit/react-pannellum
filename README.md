@@ -52,13 +52,75 @@ class Example extends React.Component {
 
 An unique ID for the first scene.
 
-### imageSource (required): string
-
-Path of image you want to display
-
 ### id (required): string
 
 Unique id for component
+
+### type (optional): string
+
+This specifies the panorama type. Can be `equirectangular`, `cubemap`, or `multires`. Defaults to `equirectangular`.
+
+### imageSource (optional): string
+
+Will required when type is `equirectangular`
+
+Path of image you want to display. Sets the URL to the equirectangular panorama image. This is relative to `basePath` if it is set, else it is relative to the location of `pannellum.htm`. An absolute URL can also be used.
+
+### equirectangularOptions (optional): object
+
+For `equirectangular` type only.
+
+> ### haov (number)
+
+> Sets the panorama’s horizontal angle of view, in degrees. Defaults to `360`. This is used if the equirectangular image does not cover a full 360 degrees in the horizontal.
+
+> ### vaov (number)
+
+> Sets the panorama’s vertical angle of view, in degrees. Defaults to `180`. This is used if the equirectangular image does not cover a full 180 degrees in the vertical.
+
+> ### vOffset (number)
+
+> Sets the vertical offset of the center of the equirectangular image from the horizon, in degrees. Defaults to `0`. This is used if `vaov` is less than `180` and the equirectangular image is not cropped symmetrically.
+
+> ### ignoreGPanoXMP (boolean)
+
+> If set to `true`, any embedded Photo Sphere XMP data will be ignored; else, said data will override any existing settings. Defaults to `false`.
+
+### cubeMap (optional - specific options): array
+
+This is an array of URLs for the six cube faces in the order front, right, back, left, up, down. These are relative to `basePath` if it is set, else they are relative to the location of `pannellum.htm`. Absolute URLs can also be used. Partial cubemap images may be specified by giving `null` instead of a URL.
+
+### multiRes (optional - specific options): object
+
+This contains information about the multiresolution panorama in sub-keys.
+
+> ### basePath (string)
+
+> This is the base path of the URLs for the multiresolution tiles. It is relative to the regular `basePath` option if it is defined, else it is relative to the location of `pannellum.htm`. An absolute URL can also be used.
+
+> ### path (string)
+
+> This is a format string for the location of the multiresolution tiles, relative to `multiRes.basePath`, which is relative to `basePath`. Format parameters are `%l` for the zoom level, `%s` for the cube face, `%x` for the x index, and `%y` for the y index. For each tile, `.extension` is appended.
+
+> ### fallbackPath (string)
+
+> This is a format string for the location of the fallback tiles for the CSS 3D transform-based renderer if the WebGL renderer is not supported, relative to `multiRes.basePath`, which is relative to `basePath`. The only format parameter is `%s`, for the cube face. For each face, `.extension` is appended.
+
+> ### extension (string)
+
+> Specifies the tiles’ file extension. Do not include the `.`.
+
+> ### tileResolution (number)
+
+> This specifies the size in pixels of each image tile.
+
+> ### maxLevel (number)
+
+> This specifies the maximum zoom level.
+
+> ### cubeResolution (number)
+
+> This specifies the size in pixels of the full resolution cube faces the image tiles were created from.
 
 ### style (optional): object
 
@@ -88,6 +150,18 @@ config = {
 };
 ```
 
+### title (optional): string
+
+If set, the value is displayed as the panorama’s title. If no title is desired, don’t set this parameter.
+
+### description (optional): string
+
+If set, the value is displayed as the panorama’s description. If no description is desired, don’t set this parameter.
+
+### author (optional): string
+
+If set, the value is displayed as the panorama’s author. If no author is desired, don’t set this parameter.
+
 ### autoLoad (optional): boolean
 
 When set to `true`, the panorama will automatically load. When `false`, the user needs to click on the load button to load the panorama. Defaults to `false`.
@@ -107,6 +181,18 @@ Sets the delay, in milliseconds, to stop automatically rotating the panorama aft
 ### preview (optional): string
 
 Specifies a URL for a preview image to display before the panorama is loaded.
+
+### previewTitle (optional): string
+
+Specifies the title to be displayed while the load button is displayed.
+
+### previewDescription (optional): string
+
+Specifies the description to be displayed while the load button is displayed.
+
+### previewAuthor (optional): string
+
+Specifies the author to be displayed while the load button is displayed.
 
 ### uiText (optional): object
 
@@ -247,7 +333,7 @@ When `true`, the mouse pointer’s pitch and yaw are logged to the console when 
 
 ## <a id="apiEvents" ></a> API Events
 
-### - Do not call API event in `componentDidMount` or API event will return undefined.
+### Do not call API event in `componentDidMount` or API event will return undefined.
 
 > ### isLoaded
 >
@@ -510,6 +596,10 @@ Returns `true` if supported, else `false`.
 > Check if device orientation control is currently activated.
 
 Returns `true` if active, else `false`.
+
+> ### getViewer
+>
+> Get panorama settings
 
 > ### destroy
 >
