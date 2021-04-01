@@ -1,5 +1,7 @@
 # react-pannellum
 
+## Version `0.2.1` with a lot of changes
+
 > A library show panorama image for react
 
 > This library use source from [https://pannellum.org/](https://pannellum.org/)
