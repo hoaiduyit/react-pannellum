@@ -11,6 +11,7 @@ class ReactPannellum extends React.Component {
   static propTypes = {
     id: PropTypes.string.isRequired,
     sceneId: PropTypes.string.isRequired,
+    children: PropTypes.any,
     type: PropTypes.string,
     imageSource: PropTypes.string,
     equirectangularOptions: PropTypes.shape({}),
@@ -103,6 +104,7 @@ class ReactPannellum extends React.Component {
           },
           () => this.init()
         );
+        break;
       case "multires":
         this.setState(
           {
@@ -112,6 +114,7 @@ class ReactPannellum extends React.Component {
           },
           () => this.init()
         );
+        break;
       default:
         break;
     }
@@ -120,13 +123,13 @@ class ReactPannellum extends React.Component {
   componentDidMount() {
     this.initPanalleum();
     this.props.onPanoramaLoaded &&
-    myPannellum.on("load", () => this.props.onPanoramaLoaded());
+      myPannellum.on("load", () => this.props.onPanoramaLoaded());
   }
 
   componentWillUnmount() {
     myPannellum &&
-    this.props.onPanoramaLoaded &&
-    myPannellum.off("load", this.props.onPanoramaLoaded);
+      this.props.onPanoramaLoaded &&
+      myPannellum.off("load", this.props.onPanoramaLoaded);
   }
 
   static isLoaded() {
