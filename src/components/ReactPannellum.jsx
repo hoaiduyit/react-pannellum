@@ -168,8 +168,7 @@ class ReactPannellum extends React.Component {
   }
 
   static setYawBounds(bounds) {
-    constants
-      .myPromise(myPannellum, { bounds })
+    myPromise(myPannellum, { bounds })
       .then(({ bounds }) => {
         myPannellum.setYawBounds(bounds);
       })
@@ -193,8 +192,7 @@ class ReactPannellum extends React.Component {
   }
 
   static setHfovBounds(bounds) {
-    constants
-      .myPromise(myPannellum, { bounds })
+    myPromise(myPannellum, { bounds })
       .then(({ bounds }) => {
         myPannellum.setHfovBounds(bounds);
       })
@@ -214,8 +212,7 @@ class ReactPannellum extends React.Component {
   }
 
   static setNorthOffset(heading) {
-    constants
-      .myPromise(myPannellum, { heading })
+    myPromise(myPannellum, { heading })
       .then(({ heading }) => {
         myPannellum.setNorthOffset(heading);
       })
@@ -229,8 +226,7 @@ class ReactPannellum extends React.Component {
   }
 
   static setHorizonRoll(roll) {
-    constants
-      .myPromise(myPannellum, { roll })
+    myPromise(myPannellum, { roll })
       .then(({ roll }) => {
         myPannellum.setHorizonRoll(roll);
       })
@@ -244,8 +240,7 @@ class ReactPannellum extends React.Component {
   }
 
   static setHorizonPitch(pitch) {
-    constants
-      .myPromise(myPannellum, { pitch })
+    myPromise(myPannellum, { pitch })
       .then(({ pitch }) => {
         myPannellum.setHorizonPitch(pitch);
       })
@@ -255,8 +250,7 @@ class ReactPannellum extends React.Component {
   }
 
   static startAutoRotate(speed, pitch) {
-    constants
-      .myPromise(myPannellum, { pitch })
+    myPromise(myPannellum, { pitch })
       .then(({ pitch }) => {
         myPannellum.startAutoRotate(speed, pitch);
       })
@@ -277,8 +271,7 @@ class ReactPannellum extends React.Component {
 
   static addScene(sceneId, config, callback) {
     if (sceneId && sceneId !== "" && config && config !== {}) {
-      constants
-        .myPromise(myPannellum, { sceneId, config, callback })
+      myPromise(myPannellum, { sceneId, config, callback })
         .then(({ sceneId, config, callback }) => {
           myPannellum.addScene(sceneId, config);
           callback && callback();
@@ -303,8 +296,7 @@ class ReactPannellum extends React.Component {
 
   static removeScene(sceneId, callback) {
     if (sceneId && sceneId !== "") {
-      constants
-        .myPromise(myPannellum, { sceneId })
+      myPromise(myPannellum, { sceneId })
         .then(({ sceneId }) => {
           myPannellum.removeScene(sceneId);
           callback && callback();
@@ -343,8 +335,7 @@ class ReactPannellum extends React.Component {
 
   static addHotSpot(hotspot, sceneId) {
     if (hotspot !== {}) {
-      constants
-        .myPromise(myPannellum, { hotspot, sceneId })
+      myPromise(myPannellum, { hotspot, sceneId })
         .then(({ hotspot, sceneId }) => {
           myPannellum.addHotSpot(hotspot, sceneId);
         })
@@ -360,8 +351,7 @@ class ReactPannellum extends React.Component {
 
   static removeHotSpot(hotSpotId, sceneId) {
     if (hotSpotId !== "") {
-      constants
-        .myPromise(myPannellum, { hotSpotId, sceneId })
+      myPromise(myPannellum, { hotSpotId, sceneId })
         .then(({ hotSpotId, sceneId }) => {
           myPannellum.removeHotSpot(hotSpotId, sceneId);
         })
