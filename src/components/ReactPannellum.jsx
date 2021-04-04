@@ -75,6 +75,8 @@ class ReactPannellum extends React.Component {
         },
       },
     });
+    this.props.onPanoramaLoaded &&
+      myPannellum.on("load", () => this.props.onPanoramaLoaded());
   };
 
   initPanalleum() {
@@ -122,8 +124,6 @@ class ReactPannellum extends React.Component {
 
   componentDidMount() {
     this.initPanalleum();
-    this.props.onPanoramaLoaded &&
-      myPannellum.on("load", () => this.props.onPanoramaLoaded());
   }
 
   componentWillUnmount() {
