@@ -26,9 +26,6 @@ export const configs = {
     ignoreGPanoXMP: false,
   },
   panoramaConfigs: {
-    title: "",
-    author: "",
-    description: "",
     autoLoad: false,
     autoRotate: 0,
     autoRotateInactivityDelay: 0,
