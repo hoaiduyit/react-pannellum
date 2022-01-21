@@ -19,7 +19,6 @@ export default (function (window, document, undefined) {
       fullscreenActive = false,
       loaded,
       error = false,
-      isTimedOut = false,
       listenersAdded = false,
       panoImage,
       prevTime,
@@ -78,23 +77,7 @@ export default (function (window, document, undefined) {
       crossOrigin: "anonymous",
       touchPanSpeedCoeffFactor: 1,
       capturedKeyNumbers: [
-        16,
-        17,
-        27,
-        37,
-        38,
-        39,
-        40,
-        61,
-        65,
-        68,
-        83,
-        87,
-        107,
-        109,
-        173,
-        187,
-        189,
+        16, 17, 27, 37, 38, 39, 40, 61, 65, 68, 83, 87, 107, 109, 173, 187, 189,
       ],
       friction: 0.15,
     };
@@ -247,7 +230,7 @@ export default (function (window, document, undefined) {
 
     // Device orientation toggle
     controls.orientation = document.createElement("div");
-    controls.orientation.addEventListener("click", function (e) {
+    controls.orientation.addEventListener("click", function () {
       if (orientation) stopOrientation();
       else startOrientation();
     });
@@ -417,7 +400,9 @@ export default (function (window, document, undefined) {
               anError(config.uiText.fileAccessError.replace("%s", a.outerHTML));
             }
             var img = this.response;
-            parseGPanoXMP(img);
+            if (img) {
+              parseGPanoXMP(img);
+            }
             infoDisplay.load.msg.innerHTML = "";
           };
           xhr.onprogress = function (e) {
@@ -563,9 +548,6 @@ export default (function (window, document, undefined) {
 
       renderInit();
       setHfov(config.hfov); // possibly adapt hfov after configuration and canvas is complete; prevents empty space on top or bottom by zomming out too much
-      setTimeout(function () {
-        isTimedOut = true;
-      }, 500);
     }
 
     /**
@@ -666,9 +648,11 @@ export default (function (window, document, undefined) {
         // Load panorama
         panoImage.src = window.URL.createObjectURL(image);
       });
-      if (reader.readAsBinaryString !== undefined)
+      if (reader.readAsBinaryString !== undefined) {
         reader.readAsBinaryString(image);
-      else reader.readAsText(image);
+      } else {
+        reader.readAsText(image);
+      }
     }
 
     /**
@@ -1616,8 +1600,7 @@ export default (function (window, document, undefined) {
         tmpyaw = config.yaw;
 
         // Optionally avoid showing background (empty space) on left or right by adapting min/max yaw
-        var hoffcut = 0,
-          voffcut = 0;
+        var hoffcut = 0;
         if (config.avoidShowingBackground) {
           var hfov2 = config.hfov / 2,
             vfov2 =
@@ -1628,15 +1611,7 @@ export default (function (window, document, undefined) {
                 180) /
               Math.PI,
             transposed = config.vaov > config.haov;
-          if (transposed) {
-            voffcut =
-              vfov2 *
-              (1 -
-                Math.min(
-                  Math.cos(((config.pitch - hfov2) / 180) * Math.PI),
-                  Math.cos(((config.pitch + hfov2) / 180) * Math.PI)
-                ));
-          } else {
+          if (!transposed) {
             hoffcut =
               hfov2 *
               (1 -
