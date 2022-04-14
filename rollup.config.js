@@ -15,6 +15,11 @@ export default {
       format: "cjs",
       sourcemap: false,
     },
+    {
+      file: pkg.module,
+      format: "esm",
+      sourcemap: false,
+    },
   ],
   plugins: [
     resolve({ preferBuiltins: true, browser: true }),
