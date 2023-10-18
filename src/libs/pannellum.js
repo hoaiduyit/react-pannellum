@@ -557,7 +557,11 @@ export default (function (window, document, undefined) {
      * @param {Image} image - Image to read XMP metadata from.
      */
     function parseGPanoXMP(image) {
-      var reader = new FileReader();
+      var fileReader = new FileReader();
+      var reader = fileReader.addEventListener
+        ? fileReader
+        : fileReader._realReader;
+
       reader.addEventListener("loadend", function () {
         var img = reader.result;
 
