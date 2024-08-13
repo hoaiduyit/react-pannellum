@@ -285,7 +285,7 @@ class ReactPannellum extends React.Component {
   }
 
   static addScene(sceneId, config, callback) {
-    if (sceneId && sceneId !== "" && config && config !== {}) {
+    if (sceneId && sceneId !== "" && config && JSON.stringify(config) !== "{}") {
       myPromise(myPannellum, { sceneId, config, callback })
         .then(({ sceneId, config, callback }) => {
           myPannellum.addScene(sceneId, config);
@@ -349,7 +349,7 @@ class ReactPannellum extends React.Component {
   }
 
   static addHotSpot(hotspot, sceneId) {
-    if (hotspot !== {}) {
+    if (JSON.stringify(hotspot) !== "{}") {
       myPromise(myPannellum, { hotspot, sceneId })
         .then(({ hotspot, sceneId }) => {
           myPannellum.addHotSpot(hotspot, sceneId);
