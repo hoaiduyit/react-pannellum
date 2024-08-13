@@ -637,6 +637,10 @@ Returns `true` if active, else `false`.
 >
 > Get panorama settings
 
+> ### getViewers
+>
+> Get object for every panorama.
+
 > ### destroy
 >
 > Destructor.

@@ -6,6 +6,7 @@ import { configs } from "../utils/constants";
 import "../css/pannellum.css";
 
 let myPannellum = null;
+let myViewers = [];
 
 class ReactPannellum extends React.Component {
   static propTypes = {
@@ -64,7 +65,7 @@ class ReactPannellum extends React.Component {
         firstScene: sceneId,
       },
       scenes: {
-        [sceneId]: {
+        [sceneId]: JSON.parse(JSON.stringify({
           ...configs.panoramaConfigs,
           ...configs.equirectangularOptions,
           ...configs.uiText,
@@ -74,9 +75,10 @@ class ReactPannellum extends React.Component {
           ...equirectangularOptions,
           cubeMap,
           multiRes,
-        },
+        })),
       },
     });
+    myViewers.push(myPannellum);
     this.props.onPanoramaLoaded &&
       myPannellum.on("load", () => this.props.onPanoramaLoaded());
     this.props.onPanoramaMouseDown &&
@@ -408,6 +410,10 @@ class ReactPannellum extends React.Component {
 
   static getViewer() {
     return myPannellum;
+  }
+
+  static getViewers() {
+    return myViewers;
   }
 
   render() {

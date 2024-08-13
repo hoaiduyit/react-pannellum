@@ -12,13 +12,14 @@
     "npm": ">=6"
   },
   "scripts": {
+    "prepare": "npm run build",
     "test": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
     "build": "rollup -c",
     "start": "rollup -c -w"
   },
   "peerDependencies": {
-    "postcss": "8.2.10",
+    "postcss": "^8.2.10",
     "prop-types": "^15.5.4",
     "react": ">=17.0.2 <19.0.0",
     "react-dom": ">=17.0.2 <19.0.0"
