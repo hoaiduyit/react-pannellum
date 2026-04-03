@@ -5,6 +5,9 @@ export type {
   ReactPannellumProps,
   PanoramaType,
   MultiResConfig,
+  ReactPannellumConfig,
+  PannellumHotSpot,
+  PannellumUiText,
 } from "@/components/ReactPannellum.js";
 
 export type { PannellumViewerApi } from "@/types/PannellumViewerApi.js";

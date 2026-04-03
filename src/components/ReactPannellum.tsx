@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef } from "react";
 import { createPannellumViewer } from "@/pannellumBridge.js";
 import { configs } from "@/utils/constants.js";
 import type { PannellumViewer } from "@/types/PannellumViewer.js";
+import type { ReactPannellumConfig } from "@/types/ReactPannellumConfig.js";
 import { PannellumInstanceContext } from "@/contexts/pannellumContext.js";
 import { registerViewer, unregisterViewer } from "@/utils/viewerRegistry.js";
 import "../css/pannellum.css";
@@ -27,13 +28,19 @@ export interface ReactPannellumProps {
   equirectangularOptions?: Record<string, unknown>;
   cubeMap?: string[];
   multiRes?: MultiResConfig;
-  config?: Record<string, unknown>;
+  config?: ReactPannellumConfig;
   className?: string;
   style?: React.CSSProperties;
   onPanoramaLoaded?: () => void;
   onPanoramaMouseDown?: (event: unknown) => void;
   onPanoramaMouseUp?: (event: unknown) => void;
 }
+
+export type {
+  PannellumHotSpot,
+  PannellumUiText,
+  ReactPannellumConfig,
+} from "@/types/ReactPannellumConfig.js";
 
 export default function ReactPannellum(props: ReactPannellumProps) {
   const {
