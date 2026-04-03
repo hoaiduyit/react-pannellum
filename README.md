@@ -26,10 +26,10 @@ Earlier releases exposed a **class** component. The default export is now a **fu
 | Area | Notes |
 |------|--------|
 | **React versions** | Supported as **peer** dependencies: **React 18** and **React 19** (with matching `react-dom`). |
-| **Import** | Same as before: `import ReactPannellum from "react-pannellum"`. |
-| **Static / imperative API** | Methods such as `ReactPannellum.getPitch()`, `loadScene`, `addHotSpot`, etc. remain on the **default export** object (same call pattern as the old class statics). |
-| **Props** | Same props; **`prop-types` was removed** from this package — TypeScript users get exported types (`ReactPannellumProps`, etc.); plain JS apps do not get runtime prop validation from the library. |
-| **Children** | Pass **`children` as normal JSX children** inside `<ReactPannellum>…</ReactPannellum>` (a root `<div>` wraps them). |
+| **Import** | `import ReactPannellum, { usePannellum } from "react-pannellum"` (default export is the viewer component; **`usePannellum`** is the imperative API). |
+| **Imperative API** | Use the **`usePannellum()`** hook from a component rendered **inside** `<ReactPannellum>...</ReactPannellum>`. It returns an object with all viewer methods (`getPitch`, `setYaw`, `loadScene`, …). **Static methods on the component and named exports such as `getConfig` are removed** — migrate to the hook. |
+| **Props** | Same props; **`prop-types` was removed** from this package — TypeScript users get exported types (`ReactPannellumProps`, `PannellumViewerApi`, etc.); plain JS apps do not get runtime prop validation from the library. |
+| **Children** | **Required for `usePannellum`:** render a child (or descendants) that calls the hook. Pass **`children` as normal JSX children** inside `<ReactPannellum>` (a root `<div>` wraps them). |
 | **TypeScript** | Types ship with the package (`"types"` in `package.json`). |
 | **Build output** | The library is compiled to **ESM** in `dist/` (no CommonJS bundle). |
 
@@ -37,36 +37,78 @@ Internals (hooks, cleanup, listener registration) changed; if you relied on undo
 
 ## Usage
 
-1. [Config props](#config)
-2. [API Events](#apiEvents)
-3. [API Event Listeners](#apiEventListeners)
+1. [`usePannellum` hook](#usePannellum)
+2. [Config props](#config)
+3. [Imperative API](#apiEvents)
+4. [Event listener props](#apiEventListeners)
+
+### <a id="usePannellum"></a> `usePannellum()`
+
+Call **`usePannellum()`** from any **descendant** of `<ReactPannellum>` (for example a child component). It returns a stable object of imperative methods for **that** viewer instance (`PannellumViewerApi` in TypeScript).
 
 ```tsx
 import { useCallback } from "react";
-import ReactPannellum, { getConfig } from "react-pannellum";
+import ReactPannellum, { usePannellum } from "react-pannellum";
+
+function Toolbar() {
+  const p = usePannellum();
+
+  const showConfig = useCallback(() => {
+    console.log(p.getConfig());
+  }, [p]);
+
+  return (
+    <button type="button" onClick={showConfig}>
+      Log config
+    </button>
+  );
+}
 
 export function Example() {
-  const showConfig = useCallback(() => {
-    console.log(getConfig());
-  }, []);
-
   const config = {
     autoRotate: -2,
   };
 
   return (
-    <div>
-      <ReactPannellum
-        id="1"
-        sceneId="firstScene"
-        imageSource="https://pannellum.org/images/alma.jpg"
-        config={config}
-      />
-      <button type="button" onClick={showConfig}>
-        Log config
-      </button>
-    </div>
+    <ReactPannellum
+      id="1"
+      sceneId="firstScene"
+      imageSource="https://pannellum.org/images/alma.jpg"
+      config={config}
+    >
+      <Toolbar />
+    </ReactPannellum>
   );
+}
+```
+
+Calling `usePannellum()` **outside** `<ReactPannellum>` (e.g. a sibling in the tree) throws — the hook reads from React context supplied by the viewer.
+
+```tsx
+import ReactPannellum, { usePannellum } from "react-pannellum";
+
+export function Example() {
+  const p = usePannellum(); // Error: no provider above this component
+  return <ReactPannellum id="x" sceneId="y" imageSource="…" />;
+}
+```
+
+### Full example (inline)
+
+```tsx
+import ReactPannellum, { usePannellum } from "react-pannellum";
+
+export function Example() {
+  return (
+    <ReactPannellum id="1" sceneId="firstScene" imageSource="https://pannellum.org/images/alma.jpg">
+      <Inner />
+    </ReactPannellum>
+  );
+}
+
+function Inner() {
+  const p = usePannellum();
+  return <button type="button" onClick={() => console.log(p.getPitch())}>Pitch</button>;
 }
 ```
 
@@ -391,11 +433,19 @@ Specifies an array containing RGB values [0, 1] that sets the background color f
 
 If set to `true`, prevent displaying out-of-range areas of a partial panorama by constraining the yaw and the field-of-view. Even at the corners and edges of the canvas only areas actually belonging to the image (i.e., within [`minYaw`, `maxYaw`] and [`minPitch`, `maxPitch`]) are shown, thus setting the `backgroundColor` option is not needed if this option is set. Defaults to `false`.
 
-## <a id="apiEvents" ></a> API Events
+## <a id="apiEvents" ></a> Imperative API (`usePannellum`)
 
-The viewer is created **after mount** (inside a `useEffect` in the implementation). **Do not call** the static imperative methods above **in the same synchronous turn as the first render** — the internal viewer may not exist yet, so you can get `undefined` / no-ops.
+The Pannellum **instance** is created **after mount** (inside a `useEffect`). Methods on the object returned by **`usePannellum()`** read the **current** viewer ref when invoked, so you can call them from callbacks (e.g. button clicks) even before the panorama has finished loading — many calls simply no-op or return `undefined` until the native viewer exists.
 
-Use **`onPanoramaLoaded`**, or a **`useEffect`** with an empty dependency array (runs after paint) so the component has mounted and the Pannellum instance exists.
+Prefer **`onPanoramaLoaded`** when you need to run code exactly once after the panorama is ready.
+
+In the reference below, assume:
+
+```ts
+const p = usePannellum();
+```
+
+Then use **`p.isLoaded()`**, **`p.getPitch()`**, etc. (same names as before, without the old `ReactPannellum.` prefix or top-level `getPitch` imports).
 
 > ### isLoaded
 >
@@ -568,7 +618,7 @@ Parameters:
 
 > ### getCurrentScene
 >
-> Returns `object` with sceneId and current scene config.
+> Returns the **current scene id** (`string`), same as Pannellum’s `getScene()`. For the full config object, use **`getConfig()`**.
 
 > ### getAllScenes
 >

@@ -1,3 +1,15 @@
+/** [min, max] pitch, yaw, or horizontal FOV in degrees (see README / Pannellum docs). */
+export type PannellumBounds = readonly [number, number];
+
+/** Panorama coordinates from `mouseEventToCoords` — `[pitch, yaw]` in degrees. */
+export type PannellumPitchYaw = readonly [number, number];
+
+/** One entry per scene from `getAllScenes`: a single-key object `{ [sceneId]: sceneConfig }`. */
+export type PannellumSceneListEntry = Record<string, Record<string, unknown>>;
+
+/** Current scene configuration from `getConfig` (Pannellum scene/tour shape). */
+export type PannellumSceneConfig = Record<string, unknown>;
+
 export interface PannellumViewer {
   on(event: string, handler: (...args: unknown[]) => void): void;
   off(event: string, handler: (...args: unknown[]) => void): void;
@@ -7,35 +19,35 @@ export interface PannellumViewer {
     pitch: number,
     animated?: number,
     callback?: (...args: unknown[]) => void,
-    callbackArgs?: unknown
+    callbackArgs?: Record<string, unknown>
   ): void;
-  getPitchBounds(): unknown;
-  setPitchBounds(bounds: unknown): void;
+  getPitchBounds(): PannellumBounds;
+  setPitchBounds(bounds: PannellumBounds): void;
   getYaw(): number;
   setYaw(
     yaw: number,
     animated?: number,
     callback?: (...args: unknown[]) => void,
-    callbackArgs?: unknown
+    callbackArgs?: Record<string, unknown>
   ): void;
-  getYawBounds(): unknown;
-  setYawBounds(bounds: unknown): void;
+  getYawBounds(): PannellumBounds;
+  setYawBounds(bounds: PannellumBounds): void;
   getHfov(): number;
   setHfov(
     hfov: number,
     animated?: number,
     callback?: (...args: unknown[]) => void,
-    callbackArgs?: unknown
+    callbackArgs?: Record<string, unknown>
   ): void;
-  getHfovBounds(): unknown;
-  setHfovBounds(bounds: unknown): void;
+  getHfovBounds(): PannellumBounds;
+  setHfovBounds(bounds: PannellumBounds): void;
   lookAt(
     pitch: number,
     yaw: number,
     hfov: number,
     animated?: number,
     callback?: (...args: unknown[]) => void,
-    callbackArgs?: unknown
+    callbackArgs?: Record<string, unknown>
   ): void;
   getNorthOffset(): number;
   setNorthOffset(heading: number): void;
@@ -45,10 +57,10 @@ export interface PannellumViewer {
   setHorizonPitch(pitch: number): void;
   startAutoRotate(speed?: number, pitch?: number): void;
   stopAutoRotate(): void;
-  mouseEventToCoords(event: unknown): unknown;
-  addScene(sceneId: string, config: unknown): void;
+  mouseEventToCoords(event: MouseEvent): PannellumPitchYaw;
+  addScene(sceneId: string, config: Record<string, unknown>): void;
   getScene(): string | undefined;
-  getAllScenes(): unknown;
+  getAllScenes(): PannellumSceneListEntry[];
   removeScene(sceneId: string): void;
   loadScene(
     sceneId: string,
@@ -58,9 +70,9 @@ export interface PannellumViewer {
     fadeDone?: () => void
   ): void;
   toggleFullscreen(): boolean;
-  getConfig(): unknown;
-  getContainer(): unknown;
-  addHotSpot(hotspot: unknown, sceneId?: string): void;
+  getConfig(): PannellumSceneConfig;
+  getContainer(): HTMLElement;
+  addHotSpot(hotspot: Record<string, unknown>, sceneId?: string): void;
   removeHotSpot(hotSpotId: string, sceneId?: string): void;
   destroy(): void;
   stopMovement(): void;
