@@ -1,4 +1,4 @@
-import ReactPannellum from "./components/ReactPannellum.jsx";
+import ReactPannellum from "@/components/ReactPannellum.js";
 
 const addScene = ReactPannellum.addScene;
 
@@ -85,6 +85,16 @@ const getViewer = ReactPannellum.getViewer;
 const getViewers = ReactPannellum.getViewers;
 
 export default ReactPannellum;
+
+export { ReactPannellum };
+
+export type {
+  ReactPannellumProps,
+  PanoramaType,
+  MultiResConfig,
+} from "@/components/ReactPannellum.js";
+
+export type { PannellumViewer } from "@/types/PannellumViewer.js";
 
 export {
   addScene,

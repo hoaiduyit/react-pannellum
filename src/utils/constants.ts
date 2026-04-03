@@ -51,11 +51,11 @@ export const configs = {
     minHfov: 50,
     maxHfov: 120,
     multiResMinHfov: false,
-    backgroundColor: [0, 0, 0],
+    backgroundColor: [0, 0, 0] as [number, number, number],
     avoidShowingBackground: false,
     compass: false,
     northOffset: 0,
-    hotSpots: [],
+    hotSpots: [] as unknown[],
     hotSpotDebug: false,
   },
 };

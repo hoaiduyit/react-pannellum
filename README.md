@@ -1,16 +1,39 @@
 # react-pannellum
 
-> A library show panorama image for react
+> A React library for embedding [Pannellum](https://pannellum.org/) panorama viewers.
 
-> This library use source from [https://pannellum.org/](https://pannellum.org/)
+> This library bundles source derived from [pannellum.org](https://pannellum.org/).
 
-[![NPM](https://img.shields.io/npm/v/react-pannellum.svg)](https://www.npmjs.com/package/react-pannellum) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/react-pannellum.svg)](https://www.npmjs.com/package/react-pannellum) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
 
 ## Install
 
 ```bash
-npm install --save react-pannellum
+npm install react-pannellum
 ```
+
+Peer dependencies **`react`** and **`react-dom`** (versions **^18** or **^19**) must be installed in your application.
+
+## Requirements
+
+- **React 18+** or **React 19** (with matching **React DOM**)
+- An **ESM** toolchain (Vite, webpack, Next.js, etc.). The published package uses [`"type": "module"`](https://nodejs.org/api/packages.html#type); **`require('react-pannellum')` is not supported** — use `import` (or dynamic `import()`).
+
+## Migration (class component → hooks implementation)
+
+Earlier releases exposed a **class** component. The default export is now a **function component** built with React hooks, but **the public API is intentionally stable**:
+
+| Area | Notes |
+|------|--------|
+| **React versions** | Supported as **peer** dependencies: **React 18** and **React 19** (with matching `react-dom`). |
+| **Import** | Same as before: `import ReactPannellum from "react-pannellum"`. |
+| **Static / imperative API** | Methods such as `ReactPannellum.getPitch()`, `loadScene`, `addHotSpot`, etc. remain on the **default export** object (same call pattern as the old class statics). |
+| **Props** | Same props; **`prop-types` was removed** from this package — TypeScript users get exported types (`ReactPannellumProps`, etc.); plain JS apps do not get runtime prop validation from the library. |
+| **Children** | Pass **`children` as normal JSX children** inside `<ReactPannellum>…</ReactPannellum>` (a root `<div>` wraps them). |
+| **TypeScript** | Types ship with the package (`"types"` in `package.json`). |
+| **Build output** | The library is compiled to **ESM** in `dist/` (no CommonJS bundle). |
+
+Internals (hooks, cleanup, listener registration) changed; if you relied on undocumented behavior or private APIs, re-test after upgrading.
 
 ## Usage
 
@@ -18,31 +41,32 @@ npm install --save react-pannellum
 2. [API Events](#apiEvents)
 3. [API Event Listeners](#apiEventListeners)
 
-```jsx
-import React from "react";
+```tsx
+import { useCallback } from "react";
 import ReactPannellum, { getConfig } from "react-pannellum";
 
-class Example extends React.Component {
-  click() {
+export function Example() {
+  const showConfig = useCallback(() => {
     console.log(getConfig());
-  }
+  }, []);
 
-  render() {
-    const config = {
-      autoRotate: -2,
-    };
-    return (
-      <div>
-        <ReactPannellum
-          id="1"
-          sceneId="firstScene"
-          imageSource="https://pannellum.org/images/alma.jpg"
-          config={config}
-        />
-        <div onClick={this.click}>Click me</div>
-      </div>
-    );
-  }
+  const config = {
+    autoRotate: -2,
+  };
+
+  return (
+    <div>
+      <ReactPannellum
+        id="1"
+        sceneId="firstScene"
+        imageSource="https://pannellum.org/images/alma.jpg"
+        config={config}
+      />
+      <button type="button" onClick={showConfig}>
+        Log config
+      </button>
+    </div>
+  );
 }
 ```
 
@@ -369,7 +393,9 @@ If set to `true`, prevent displaying out-of-range areas of a partial panorama by
 
 ## <a id="apiEvents" ></a> API Events
 
-### Do not call API event in `componentDidMount` or API event will return undefined.
+The viewer is created **after mount** (inside a `useEffect` in the implementation). **Do not call** the static imperative methods above **in the same synchronous turn as the first render** — the internal viewer may not exist yet, so you can get `undefined` / no-ops.
+
+Use **`onPanoramaLoaded`**, or a **`useEffect`** with an empty dependency array (runs after paint) so the component has mounted and the Pannellum instance exists.
 
 > ### isLoaded
 >
@@ -468,7 +494,7 @@ Parameters:
 - `hfov` [number] Target hfov.
 - `animated` [(boolean | number)] Animation duration in milliseconds or false for no animation (optional, default 1000).
 - `callback` [function] Function to call when animation finishes.
-- `callbackArg`s [object] Arguments to pass to callback function.
+- `callbackArgs` [object] Arguments to pass to callback function.
 
 > ### getNorthOffset
 >
@@ -645,11 +671,19 @@ Returns `true` if active, else `false`.
 >
 > Destructor.
 
-## <a id="apiEventListeners" ></a> Api Event Listeners
+## <a id="apiEventListeners"></a> API event listeners (props)
 
-> ### onPanoramaLoaded
->
-> Will be triggered when panorama is loaded
+### onPanoramaLoaded (optional): `() => void`
+
+Called when the panorama has finished loading (forwarded to Pannellum’s `load` event).
+
+### onPanoramaMouseDown (optional): `(event: unknown) => void`
+
+Called on viewer `mousedown`.
+
+### onPanoramaMouseUp (optional): `(event: unknown) => void`
+
+Called on viewer `mouseup`.
 
 ## License
 
