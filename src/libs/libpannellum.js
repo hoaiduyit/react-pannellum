@@ -42,7 +42,7 @@ export default (function (window, document, undefined) {
       vaov,
       voffset,
       callback,
-      params
+      params,
     ) {
       // Default argument for image type
       if (_imageType === undefined) _imageType = "equirectangular";
@@ -94,7 +94,7 @@ export default (function (window, document, undefined) {
                 "Cube faces have inconsistent widths: " +
                   cubeImgWidth +
                   " vs. " +
-                  image[s].width
+                  image[s].width,
               );
           } else faceMissing = true;
         }
@@ -199,7 +199,7 @@ export default (function (window, document, undefined) {
             0,
             0,
             faceCanvas.width,
-            faceCanvas.height
+            faceCanvas.height,
           );
           var data = imgData.data;
 
@@ -270,7 +270,7 @@ export default (function (window, document, undefined) {
                 "Fallback faces have inconsistent widths: " +
                   fallbackImgSize +
                   " vs. " +
-                  this.width
+                  this.width,
               );
           } else faceMissing = true;
           loaded++;
@@ -327,7 +327,7 @@ export default (function (window, document, undefined) {
               "px wide, " +
               "but this device's maximum supported size is " +
               maxWidth * 2 +
-              "px."
+              "px.",
           );
           throw {
             type: "webgl size error",
@@ -343,7 +343,7 @@ export default (function (window, document, undefined) {
               "px wide, " +
               "but this device's maximum supported size is " +
               maxWidth +
-              "px."
+              "px.",
           );
           throw {
             type: "webgl size error",
@@ -373,7 +373,7 @@ export default (function (window, document, undefined) {
       if (gl.getShaderPrecisionFormat) {
         var precision = gl.getShaderPrecisionFormat(
           gl.FRAGMENT_SHADER,
-          gl.HIGH_FLOAT
+          gl.HIGH_FLOAT,
         );
         if (precision && precision.precision < 1) {
           // `highp` precision not supported; https://stackoverflow.com/a/33308927
@@ -437,7 +437,7 @@ export default (function (window, document, undefined) {
         gl.bufferData(
           gl.ARRAY_BUFFER,
           new Float32Array([-1, 1, 1, 1, 1, -1, -1, 1, 1, -1, -1, -1]),
-          gl.STATIC_DRAW
+          gl.STATIC_DRAW,
         );
         gl.vertexAttribPointer(
           program.texCoordLocation,
@@ -445,14 +445,14 @@ export default (function (window, document, undefined) {
           gl.FLOAT,
           false,
           0,
-          0
+          0,
         );
 
         // Pass aspect ratio
         program.aspectRatio = gl.getUniformLocation(program, "u_aspectRatio");
         gl.uniform1f(
           program.aspectRatio,
-          gl.drawingBufferWidth / gl.drawingBufferHeight
+          gl.drawingBufferWidth / gl.drawingBufferHeight,
         );
 
         // Locate psi, theta, focal length, horizontal extent, vertical extent, and vertical offset
@@ -473,7 +473,7 @@ export default (function (window, document, undefined) {
         if (imageType == "equirectangular") {
           program.backgroundColor = gl.getUniformLocation(
             program,
-            "u_backgroundColor"
+            "u_backgroundColor",
           );
           gl.uniform4fv(program.backgroundColor, color.concat([1]));
         }
@@ -491,7 +491,7 @@ export default (function (window, document, undefined) {
             gl.RGB,
             gl.RGB,
             gl.UNSIGNED_BYTE,
-            image[1]
+            image[1],
           );
           gl.texImage2D(
             gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
@@ -499,7 +499,7 @@ export default (function (window, document, undefined) {
             gl.RGB,
             gl.RGB,
             gl.UNSIGNED_BYTE,
-            image[3]
+            image[3],
           );
           gl.texImage2D(
             gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
@@ -507,7 +507,7 @@ export default (function (window, document, undefined) {
             gl.RGB,
             gl.RGB,
             gl.UNSIGNED_BYTE,
-            image[4]
+            image[4],
           );
           gl.texImage2D(
             gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
@@ -515,7 +515,7 @@ export default (function (window, document, undefined) {
             gl.RGB,
             gl.RGB,
             gl.UNSIGNED_BYTE,
-            image[5]
+            image[5],
           );
           gl.texImage2D(
             gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
@@ -523,7 +523,7 @@ export default (function (window, document, undefined) {
             gl.RGB,
             gl.RGB,
             gl.UNSIGNED_BYTE,
-            image[0]
+            image[0],
           );
           gl.texImage2D(
             gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
@@ -531,7 +531,7 @@ export default (function (window, document, undefined) {
             gl.RGB,
             gl.RGB,
             gl.UNSIGNED_BYTE,
-            image[2]
+            image[2],
           );
         } else {
           if (image.width <= maxWidth) {
@@ -543,7 +543,7 @@ export default (function (window, document, undefined) {
               gl.RGB,
               gl.RGB,
               gl.UNSIGNED_BYTE,
-              image
+              image,
             );
           } else {
             // Image needs to be split into two parts due to texture size limits
@@ -561,7 +561,7 @@ export default (function (window, document, undefined) {
               0,
               0,
               image.width / 2,
-              image.height
+              image.height,
             );
             gl.texImage2D(
               glBindType,
@@ -569,7 +569,7 @@ export default (function (window, document, undefined) {
               gl.RGB,
               gl.RGB,
               gl.UNSIGNED_BYTE,
-              cropImage
+              cropImage,
             );
 
             // Create and bind texture for second half of image
@@ -584,7 +584,7 @@ export default (function (window, document, undefined) {
               0,
               0,
               image.width / 2,
-              image.height
+              image.height,
             );
             gl.texImage2D(
               glBindType,
@@ -592,7 +592,7 @@ export default (function (window, document, undefined) {
               gl.RGB,
               gl.RGB,
               gl.UNSIGNED_BYTE,
-              cropImage
+              cropImage,
             );
 
             // Set parameters for rendering any size
@@ -626,7 +626,7 @@ export default (function (window, document, undefined) {
         gl.bufferData(
           gl.ARRAY_BUFFER,
           new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]),
-          gl.STATIC_DRAW
+          gl.STATIC_DRAW,
         );
 
         // Bind square index buffer and pass indicies to WebGL
@@ -634,7 +634,7 @@ export default (function (window, document, undefined) {
         gl.bufferData(
           gl.ELEMENT_ARRAY_BUFFER,
           new Uint16Array([0, 1, 2, 0, 2, 3]),
-          gl.STATIC_DRAW
+          gl.STATIC_DRAW,
         );
 
         // Find uniforms
@@ -696,7 +696,7 @@ export default (function (window, document, undefined) {
         if (imageType != "multires") {
           gl.uniform1f(
             program.aspectRatio,
-            canvas.clientWidth / canvas.clientHeight
+            canvas.clientWidth / canvas.clientHeight,
           );
         }
       }
@@ -780,10 +780,10 @@ export default (function (window, document, undefined) {
               (v[0] * w[0] + v[1] * w[1]) /
                 (Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]) *
                   Math.sqrt(w[0] * w[0] + w[1] * w[1])),
-              1
+              1,
             ),
-            -1
-          )
+            -1,
+          ),
         );
         if (v[2] < 0) roll_adj = 2 * Math.PI - roll_adj;
         roll += roll_adj;
@@ -868,7 +868,7 @@ export default (function (window, document, undefined) {
           2 *
           Math.atan(
             Math.tan(hfov * 0.5) /
-              (gl.drawingBufferWidth / gl.drawingBufferHeight)
+              (gl.drawingBufferWidth / gl.drawingBufferHeight),
           );
         focal = 1 / Math.tan(vfov * 0.5);
 
@@ -888,7 +888,7 @@ export default (function (window, document, undefined) {
               gl.RGB,
               gl.RGB,
               gl.UNSIGNED_BYTE,
-              image
+              image,
             );
           }
         }
@@ -901,7 +901,7 @@ export default (function (window, document, undefined) {
           hfov,
           gl.drawingBufferWidth / gl.drawingBufferHeight,
           0.1,
-          100.0
+          100.0,
         );
 
         // Find correct zoom level
@@ -918,12 +918,12 @@ export default (function (window, document, undefined) {
         gl.uniformMatrix4fv(
           program.perspUniform,
           false,
-          new Float32Array(transposeMatrix4(perspMatrix))
+          new Float32Array(transposeMatrix4(perspMatrix)),
         );
         gl.uniformMatrix4fv(
           program.cubeUniform,
           false,
-          new Float32Array(transposeMatrix4(matrix))
+          new Float32Array(transposeMatrix4(matrix)),
         );
 
         // Find current nodes
@@ -936,7 +936,7 @@ export default (function (window, document, undefined) {
           // Remove older nodes from cache
           var removed = program.nodeCache.splice(
             200,
-            program.nodeCache.length - 200
+            program.nodeCache.length - 200,
           );
           for (var j = 0; j < removed.length; j++) {
             // Explicitly delete textures
@@ -953,7 +953,7 @@ export default (function (window, document, undefined) {
             1,
             0,
             0,
-            image.fullpath
+            image.fullpath,
           );
           testMultiresNode(rotPersp, ntmp, pitch, yaw, hfov);
         }
@@ -1076,7 +1076,7 @@ export default (function (window, document, undefined) {
             gl.bufferData(
               gl.ARRAY_BUFFER,
               new Float32Array(program.currentNodes[i].vertices),
-              gl.STATIC_DRAW
+              gl.STATIC_DRAW,
             );
             gl.vertexAttribPointer(
               program.vertPosLocation,
@@ -1084,7 +1084,7 @@ export default (function (window, document, undefined) {
               gl.FLOAT,
               false,
               0,
-              0
+              0,
             );
 
             // Prep for texture
@@ -1095,7 +1095,7 @@ export default (function (window, document, undefined) {
               gl.FLOAT,
               false,
               0,
-              0
+              0,
             );
 
             // Bind texture and draw tile
@@ -1157,7 +1157,7 @@ export default (function (window, document, undefined) {
         ydiff = Math.abs(ydiff);
         node.diff = Math.acos(
           Math.sin(pitch) * Math.sin(theta) +
-            Math.cos(pitch) * Math.cos(theta) * Math.cos(ydiff)
+            Math.cos(pitch) * Math.cos(theta) * Math.cos(ydiff),
         );
 
         // Add node to current nodes and load texture if needed
@@ -1265,7 +1265,7 @@ export default (function (window, document, undefined) {
             node.level + 1,
             node.x * 2,
             node.y * 2,
-            image.fullpath
+            image.fullpath,
           );
           children.push(ntmp);
           if (!(node.x == numTiles && doubleTileSize <= image.tileResolution)) {
@@ -1289,7 +1289,7 @@ export default (function (window, document, undefined) {
               node.level + 1,
               node.x * 2 + 1,
               node.y * 2,
-              image.fullpath
+              image.fullpath,
             );
             children.push(ntmp);
           }
@@ -1317,7 +1317,7 @@ export default (function (window, document, undefined) {
               node.level + 1,
               node.x * 2 + 1,
               node.y * 2 + 1,
-              image.fullpath
+              image.fullpath,
             );
             children.push(ntmp);
           }
@@ -1342,7 +1342,7 @@ export default (function (window, document, undefined) {
               node.level + 1,
               node.x * 2,
               node.y * 2 + 1,
-              image.fullpath
+              image.fullpath,
             );
             children.push(ntmp);
           }
@@ -1563,7 +1563,7 @@ export default (function (window, document, undefined) {
       var fovy =
         2 *
         Math.atan(
-          (Math.tan(hfov / 2) * gl.drawingBufferHeight) / gl.drawingBufferWidth
+          (Math.tan(hfov / 2) * gl.drawingBufferHeight) / gl.drawingBufferWidth,
         );
       var f = 1 / Math.tan(fovy / 2);
       return [
@@ -1632,7 +1632,7 @@ export default (function (window, document, undefined) {
       TextureImageLoader.prototype.loadTexture = function (
         src,
         texture,
-        callback
+        callback,
       ) {
         this.texture = texture;
         this.callback = callback;
@@ -1663,7 +1663,7 @@ export default (function (window, document, undefined) {
           textureImageCache[--cacheTop].loadTexture(src, texture, callback);
         else
           pendingTextureRequests.push(
-            new PendingTextureRequest(node, src, texture, callback)
+            new PendingTextureRequest(node, src, texture, callback),
           );
         return texture;
       };
@@ -1682,7 +1682,7 @@ export default (function (window, document, undefined) {
           node.texture = texture;
           node.textureLoaded = loaded ? 2 : 1;
         },
-        globalParams.crossOrigin
+        globalParams.crossOrigin,
       );
     }
 
@@ -1944,5 +1944,5 @@ export default (function (window, document, undefined) {
   };
 })(
   typeof window === "undefined" ? null : window,
-  typeof document === "undefined" ? null : document
+  typeof document === "undefined" ? null : document,
 );
