@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "lib": [ "ES2022", "DOM", "DOM.Iterable" ],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "jsx": "react-jsx",
@@ -16,11 +16,10 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "noEmitOnError": true,
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [ "./src/*" ]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/globals.d.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": [ "src/**/*.ts", "src/**/*.tsx", "src/globals.d.ts" ],
+  "exclude": [ "node_modules", "dist" ]
 }
