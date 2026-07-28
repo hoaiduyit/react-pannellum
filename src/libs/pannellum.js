@@ -1,4 +1,4 @@
-import libpannellum from "./libpannellum";
+import libpannellum from "./libpannellum.js";
 
 export default (function (window, document, undefined) {
   function Viewer(container, initialConfig) {
@@ -358,7 +358,7 @@ export default (function (window, document, undefined) {
           if (p === "null") {
             // support partial cubemap image with explicitly empty faces
             console.log(
-              "Will use background instead of missing cubemap face " + i
+              "Will use background instead of missing cubemap face " + i,
             );
             onLoad();
           } else {
@@ -488,12 +488,12 @@ export default (function (window, document, undefined) {
           uiContainer.addEventListener(
             "mousewheel",
             onDocumentMouseWheel,
-            false
+            false,
           );
           uiContainer.addEventListener(
             "DOMMouseScroll",
             onDocumentMouseWheel,
-            false
+            false,
           );
         }
         if (config.doubleClickZoom) {
@@ -502,22 +502,22 @@ export default (function (window, document, undefined) {
         container.addEventListener(
           "mozfullscreenchange",
           onFullScreenChange,
-          false
+          false,
         );
         container.addEventListener(
           "webkitfullscreenchange",
           onFullScreenChange,
-          false
+          false,
         );
         container.addEventListener(
           "msfullscreenchange",
           onFullScreenChange,
-          false
+          false,
         );
         container.addEventListener(
           "fullscreenchange",
           onFullScreenChange,
-          false
+          false,
         );
         window.addEventListener("resize", onDocumentResize, false);
         window.addEventListener("orientationchange", onDocumentResize, false);
@@ -584,12 +584,12 @@ export default (function (window, document, undefined) {
             var result;
             if (xmpData.indexOf(tag + '="') >= 0) {
               result = xmpData.substring(
-                xmpData.indexOf(tag + '="') + tag.length + 2
+                xmpData.indexOf(tag + '="') + tag.length + 2,
               );
               result = result.substring(0, result.indexOf('"'));
             } else if (xmpData.indexOf(tag + ">") >= 0) {
               result = xmpData.substring(
-                xmpData.indexOf(tag + ">") + tag.length + 1
+                xmpData.indexOf(tag + ">") + tag.length + 1,
               );
               result = result.substring(0, result.indexOf("<"));
             }
@@ -761,7 +761,7 @@ export default (function (window, document, undefined) {
             ", Center Yaw: " +
             config.yaw +
             ", HFOV: " +
-            config.hfov
+            config.hfov,
         );
       }
 
@@ -856,7 +856,7 @@ export default (function (window, document, undefined) {
           (2 *
             Math.atan(
               (Math.tan((config.hfov / 360) * Math.PI) * canvasHeight) /
-                canvasWidth
+                canvasWidth,
             ) *
             180) /
           Math.PI;
@@ -928,7 +928,7 @@ export default (function (window, document, undefined) {
         onPointerDownPointerY += (pos1.y - pos0.y) * 0.5;
         onPointerDownPointerDist = Math.sqrt(
           (pos0.x - pos1.x) * (pos0.x - pos1.x) +
-            (pos0.y - pos1.y) * (pos0.y - pos1.y)
+            (pos0.y - pos1.y) * (pos0.y - pos1.y),
         );
       }
       isUserInteracting = true;
@@ -971,7 +971,7 @@ export default (function (window, document, undefined) {
           clientY += (pos1.y - pos0.y) * 0.5;
           var clientDist = Math.sqrt(
             (pos0.x - pos1.x) * (pos0.x - pos1.x) +
-              (pos0.y - pos1.y) * (pos0.y - pos1.y)
+              (pos0.y - pos1.y) * (pos0.y - pos1.y),
           );
           setHfov(config.hfov + (onPointerDownPointerDist - clientDist) * 0.1);
           onPointerDownPointerDist = clientDist;
@@ -1456,7 +1456,7 @@ export default (function (window, document, undefined) {
       var t = animatedMove[axis];
       var normTime = Math.min(
         1,
-        Math.max((Date.now() - t.startTime) / 1000 / (t.duration / 1000), 0)
+        Math.max((Date.now() - t.startTime) / 1000 / (t.duration / 1000), 0),
       );
       var result =
         t.startPosition +
@@ -1610,7 +1610,7 @@ export default (function (window, document, undefined) {
             vfov2 =
               (Math.atan2(
                 Math.tan((hfov2 / 180) * Math.PI),
-                canvas.width / canvas.height
+                canvas.width / canvas.height,
               ) *
                 180) /
               Math.PI,
@@ -1621,7 +1621,7 @@ export default (function (window, document, undefined) {
               (1 -
                 Math.min(
                   Math.cos(((config.pitch - vfov2) / 180) * Math.PI),
-                  Math.cos(((config.pitch + vfov2) / 180) * Math.PI)
+                  Math.cos(((config.pitch + vfov2) / 180) * Math.PI),
                 ));
           }
         }
@@ -1666,7 +1666,7 @@ export default (function (window, document, undefined) {
           ((2 *
             Math.atan(
               Math.tan((config.hfov / 180) * Math.PI * 0.5) /
-                (canvas.width / canvas.height)
+                (canvas.width / canvas.height),
             )) /
             Math.PI) *
           180;
@@ -1685,7 +1685,7 @@ export default (function (window, document, undefined) {
           (config.pitch * Math.PI) / 180,
           (config.yaw * Math.PI) / 180,
           (config.hfov * Math.PI) / 180,
-          { roll: (config.roll * Math.PI) / 180 }
+          { roll: (config.roll * Math.PI) / 180 },
         );
 
         renderHotSpots();
@@ -1727,7 +1727,7 @@ export default (function (window, document, undefined) {
         this.w * q.w - this.x * q.x - this.y * q.y - this.z * q.z,
         this.x * q.w + this.w * q.x + this.y * q.z - this.z * q.y,
         this.y * q.w + this.w * q.y + this.z * q.x - this.x * q.z,
-        this.z * q.w + this.w * q.z + this.x * q.y - this.y * q.x
+        this.z * q.w + this.w * q.z + this.x * q.y - this.y * q.x,
       );
     };
 
@@ -1739,12 +1739,12 @@ export default (function (window, document, undefined) {
     Quaternion.prototype.toEulerAngles = function () {
       var phi = Math.atan2(
           2 * (this.w * this.x + this.y * this.z),
-          1 - 2 * (this.x * this.x + this.y * this.y)
+          1 - 2 * (this.x * this.x + this.y * this.y),
         ),
         theta = Math.asin(2 * (this.w * this.y - this.z * this.x)),
         psi = Math.atan2(
           2 * (this.w * this.z + this.x * this.y),
-          1 - 2 * (this.y * this.y + this.z * this.z)
+          1 - 2 * (this.y * this.y + this.z * this.z),
         );
       return [phi, theta, psi];
     };
@@ -1770,7 +1770,7 @@ export default (function (window, document, undefined) {
         c[0] * c[1] * c[2] - s[0] * s[1] * s[2],
         s[0] * c[1] * c[2] - c[0] * s[1] * s[2],
         c[0] * s[1] * c[2] + s[0] * c[1] * s[2],
-        c[0] * c[1] * s[2] + s[0] * s[1] * c[2]
+        c[0] * c[1] * s[2] + s[0] * s[1] * c[2],
       );
     }
 
@@ -1788,14 +1788,14 @@ export default (function (window, document, undefined) {
       var quaternion = taitBryanToQuaternion(alpha, beta, gamma);
       // Apply world transform
       quaternion = quaternion.multiply(
-        new Quaternion(Math.sqrt(0.5), -Math.sqrt(0.5), 0, 0)
+        new Quaternion(Math.sqrt(0.5), -Math.sqrt(0.5), 0, 0),
       );
       // Apply screen transform
       var angle = window.orientation
         ? (-window.orientation * Math.PI) / 180 / 2
         : 0;
       return quaternion.multiply(
-        new Quaternion(Math.cos(angle), 0, -Math.sin(angle), 0)
+        new Quaternion(Math.cos(angle), 0, -Math.sin(angle), 0),
       );
     }
 
@@ -1846,7 +1846,7 @@ export default (function (window, document, undefined) {
           (config.vaov * Math.PI) / 180,
           (config.vOffset * Math.PI) / 180,
           renderInitCallback,
-          params
+          params,
         );
         if (config.dynamic !== true) {
           // Allow image to be garbage collected
@@ -1862,7 +1862,7 @@ export default (function (window, document, undefined) {
           anError(
             config.uiText.textureSizeError
               .replace("%s", event.width)
-              .replace("%s", event.maxWidth)
+              .replace("%s", event.maxWidth),
           );
         } else {
           anError(config.uiText.unknownError);
@@ -1982,7 +1982,7 @@ export default (function (window, document, undefined) {
                 hs.sceneId,
                 hs.targetPitch,
                 hs.targetYaw,
-                hs.targetHfov
+                hs.targetHfov,
               );
             }
             return false;
@@ -2009,7 +2009,7 @@ export default (function (window, document, undefined) {
           function (e) {
             hs.clickHandlerFunc(e, hs.clickHandlerArgs);
           },
-          "false"
+          "false",
         );
         div.className += " pnlm-pointer";
         span.className += " pnlm-pointer";
@@ -2291,7 +2291,7 @@ export default (function (window, document, undefined) {
               }
               infoDisplay.author.innerHTML = config.uiText.bylineLabel.replace(
                 "%s",
-                authorText
+                authorText,
               );
               infoDisplay.container.style.display = "inline";
               break;
@@ -2432,12 +2432,12 @@ export default (function (window, document, undefined) {
         document.msFullscreenElement
       ) {
         controls.fullscreen.classList.add(
-          "pnlm-fullscreen-toggle-button-active"
+          "pnlm-fullscreen-toggle-button-active",
         );
         fullscreenActive = true;
       } else {
         controls.fullscreen.classList.remove(
-          "pnlm-fullscreen-toggle-button-active"
+          "pnlm-fullscreen-toggle-button-active",
         );
         fullscreenActive = false;
       }
@@ -2483,7 +2483,7 @@ export default (function (window, document, undefined) {
         minHfov = Math.min(
           minHfov,
           renderer.getCanvas().width /
-            ((config.multiRes.cubeResolution / 90) * 0.9)
+            ((config.multiRes.cubeResolution / 90) * 0.9),
         );
       }
       if (minHfov > config.maxHfov) {
@@ -2507,10 +2507,10 @@ export default (function (window, document, undefined) {
           (Math.atan(
             (Math.tan(((config.maxPitch - config.minPitch) / 360) * Math.PI) /
               canvas.height) *
-              canvas.width
+              canvas.width,
           ) *
             360) /
-            Math.PI
+            Math.PI,
         );
       }
       return newHfov;
@@ -2573,7 +2573,7 @@ export default (function (window, document, undefined) {
           (config.pitch * Math.PI) / 180,
           (config.yaw * Math.PI) / 180,
           (config.hfov * Math.PI) / 180,
-          { returnImage: true }
+          { returnImage: true },
         );
         if (data !== undefined) {
           fadeImg = new Image();
@@ -2962,7 +2962,7 @@ export default (function (window, document, undefined) {
       hfov,
       animated,
       callback,
-      callbackArgs
+      callbackArgs,
     ) {
       animated = animated === undefined ? 1000 : Number(animated);
       if (pitch !== undefined && Math.abs(pitch - config.pitch) > eps) {
@@ -3025,7 +3025,7 @@ export default (function (window, document, undefined) {
       config.horizonRoll = Math.min(90, Math.max(-90, roll));
       renderer.setPose(
         (config.horizonPitch * Math.PI) / 180,
-        (config.horizonRoll * Math.PI) / 180
+        (config.horizonRoll * Math.PI) / 180,
       );
       animateInit();
       return this;
@@ -3052,7 +3052,7 @@ export default (function (window, document, undefined) {
       config.horizonPitch = Math.min(90, Math.max(-90, pitch));
       renderer.setPose(
         (config.horizonPitch * Math.PI) / 180,
-        (config.horizonRoll * Math.PI) / 180
+        (config.horizonRoll * Math.PI) / 180,
       );
       animateInit();
       return this;
@@ -3454,28 +3454,28 @@ export default (function (window, document, undefined) {
         container.removeEventListener(
           "mozfullscreenchange",
           onFullScreenChange,
-          false
+          false,
         );
         container.removeEventListener(
           "webkitfullscreenchange",
           onFullScreenChange,
-          false
+          false,
         );
         container.removeEventListener(
           "msfullscreenchange",
           onFullScreenChange,
-          false
+          false,
         );
         container.removeEventListener(
           "fullscreenchange",
           onFullScreenChange,
-          false
+          false,
         );
         window.removeEventListener("resize", onDocumentResize, false);
         window.removeEventListener(
           "orientationchange",
           onDocumentResize,
-          false
+          false,
         );
         container.removeEventListener("keydown", onDocumentKeyPress, false);
         container.removeEventListener("keyup", onDocumentKeyUp, false);
@@ -3494,5 +3494,5 @@ export default (function (window, document, undefined) {
   };
 })(
   typeof window === "undefined" ? null : window,
-  typeof document === "undefined" ? null : document
+  typeof document === "undefined" ? null : document,
 );
